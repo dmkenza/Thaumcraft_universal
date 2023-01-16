@@ -1,0 +1,38 @@
+#modLoader = "javafml"
+#loaderVersion = "[43,)"
+
+modLoader="kotlinforforge"
+loaderVersion="[3,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "thaumcraft"
+version = "${version}"
+displayName = "Kenza's Thaumcraft"
+authors = "Kenza"
+description = '''
+Desc test.
+'''
+#logoFile = ""
+
+[[dependencies.thaumcraft]]
+modId = "forge"
+mandatory = true
+versionRange = "[43,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.thaumcraft]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19.2,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.thaumcraft]]
+modId = "architectury"
+mandatory = true
+versionRange = "[6.2.43,)"
+ordering = "AFTER"
+side = "BOTH"

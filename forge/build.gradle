@@ -1,0 +1,117 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "kotlin"
+}
+
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+//    forge {
+//        convertAccessWideners = true
+//        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+//    }
+    forge {
+        convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+        mixinConfig "thaumcraft-common.mixins.json"
+        mixinConfig "thaumcraft.mixins.json"
+    }
+}
+
+configurations {
+    shadow
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
+    modImplementation fileTree(dir: 'libs_mods', include: ['*.jar'])
+    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
+//    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
+
+    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+//    implementation 'thedarkcolour:kotlinforforge:1.16.0'
+//    forgeRuntimeLibrary(kotlin("stdlib-jdk8", version = "1.6.0"))
+//    forgeRuntimeLibrary(kotlin("reflect", version = "1.6.0"))
+
+    // Remove the next line if you don't want to depend on the API
+    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) {
+        transitive false
+        exclude module: "libgui"
+    }
+
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
+        transitive = false
+        exclude module: "libgui"
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier "forge+${rootProject.minecraft_version}"
+}
+
+jar {
+    classifier "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "17"
+}
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+    }
+}

@@ -1,0 +1,98 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+dependencies {
+//    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
+//    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
+//    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
+
+    modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    // Remove the next line if you don't want to depend on the API
+    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+    modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}")
+//    modApi include("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
+//        exclude(group: "net.fabricmc.fabric-api")
+//    }
+
+
+    modImplementation ("io.github.cottonmc:LibGui:6.0.1+1.19")
+    include ("io.github.cottonmc:LibGui:6.0.1+1.19")
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+
+remapJar {
+    injectAccessWidener = true
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier "fabric+${rootProject.minecraft_version}"
+}
+
+
+jar {
+    classifier "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+    }
+}
