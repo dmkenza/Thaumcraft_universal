@@ -8,7 +8,15 @@ architectury {
     platformSetupLoomIde()
     forge()
 }
-
+sourceSets {
+    main{
+        resources {
+            srcDirs += [
+                    'src/main/generated'
+            ]
+        }
+    }
+}
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
@@ -17,13 +25,37 @@ loom {
 //        convertAccessWideners = true
 //        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 //    }
+
+
+
     forge {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfig "thaumcraft-common.mixins.json"
         mixinConfig "thaumcraft.mixins.json"
+
+        dataGen {
+            mod "thaumcraft"
+        }
+
+
+        launches {
+            data {
+                arg "--existing", file("src/main/resources").absolutePath
+//                arg "output", file("../common/src/main/resources").absolutePath
+            }
+        }
+
     }
+//    launchConfigs {
+//        data {
+//            arg("--output", file("src/main/resources").absolutePath)
+//
+////            arg("--tweakClass", "gg.essential.loader.stage0.EssentialSetupTweaker")
+//        }
+//    }
+
 }
 
 configurations {

@@ -18,3 +18,5 @@ classes/
 *.launch
 /forge/libs_mods/
 /common/.architectury-transformer/
+*.jar_
+/forge/src/generated/resources/.cache/*

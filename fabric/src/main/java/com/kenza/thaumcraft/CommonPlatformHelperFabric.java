@@ -1,6 +1,5 @@
 package com.kenza.thaumcraft;
 
-import com.kenza.discholder.CommonPlatformHelper;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemGroup;
