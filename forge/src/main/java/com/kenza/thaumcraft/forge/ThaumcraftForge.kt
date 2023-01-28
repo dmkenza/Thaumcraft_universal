@@ -3,7 +3,6 @@ package com.kenza.thaumcraft.forge
 import com.kenza.thaumcraft.MOD_ID
 import com.kenza.thaumcraft.ThaumcraftCommon
 import com.kenza.thaumcraft.commonPlatformHelper
-import com.kenza.thaumcraft.forge.datagen.DataGen
 import dev.architectury.platform.forge.EventBuses
 import io.github.cottonmc.cotton.gui.impl.LibGuiCommon
 import net.minecraftforge.api.distmarker.Dist
@@ -17,6 +16,7 @@ import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
+
 @Mod(MOD_ID)
 class ThaumcraftForge {
     init {
@@ -27,7 +27,7 @@ class ThaumcraftForge {
 //        val bus = FMLJavaModLoadingContext.get().modEventBus
         EventBuses.registerModEventBus(MOD_ID, bus)
         bus.addListener { event: FMLCommonSetupEvent -> setup(event) }
-        bus.addListener { event: GatherDataEvent -> DataGen.init(event) }
+//        bus.addListener { event: GatherDataEvent -> DataGen.init(event) }
         LibGuiCommon.onInitialize()
         ThaumcraftCommon.onInitialize()
 

@@ -8,9 +8,22 @@ architectury {
     fabric()
 }
 
+def dataOutput = '../common/src/main/generated'
+
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+    runs {
+        datagen {
+            server()
+            name "Data Generation"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${file(dataOutput)}"
+            runDir "build/datagen"
+        }
+    }
 }
+
+sourceSets { main { resources { srcDirs += dataOutput } } }
 
 configurations {
     common
@@ -24,6 +37,8 @@ dependencies {
 //    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
 //    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
+    common(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
 
     modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"

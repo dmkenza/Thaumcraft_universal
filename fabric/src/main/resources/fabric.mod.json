@@ -12,18 +12,24 @@
     "sources": "https://github.com/dmkenza/DiscHolder_Fabric",
     "issues": "https://github.com/dmkenza/DiscHolder_universal/issues"
   },
-
   "license": "CC0-1.0",
   "icon": "assets/thaumcraft/logo.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.kenza.thaumcraft.ThaumcraftFabric"
+      {
+        "adapter": "kotlin",
+        "value": "com.kenza.thaumcraft.ThaumcraftFabric"
+      }
     ],
-
     "client": [
-      "com.kenza.thaumcraft.ThaumcraftFabricClient"
+      {
+        "adapter": "kotlin",
+        "value": "com.kenza.thaumcraft.ThaumcraftFabricClient"
+      }
+    ],
+    "fabric-datagen": [
+      "com.kenza.thaumcraft.datagen.DataGeneration"
     ],
     "modmenu": []
   },
@@ -36,5 +42,4 @@
   "suggests": {
     "modmenu": "*"
   }
-
 }

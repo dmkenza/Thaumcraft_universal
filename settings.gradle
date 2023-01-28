@@ -45,11 +45,10 @@
  }
 
 
-
  include("common")
 include("fabric")
 include("forge")
-//include ":LibGui"
-//project(":LibGui").projectDir = file("C:/projects_mc/library/LibGui_universal/common")
+include ":kenzaMcApi"
+project(":kenzaMcApi").projectDir = file("C:\\projects_mc\\support\\kenzaMcApi\\1_19_2")
 
 rootProject.name = "Thaumcraft_universal"
