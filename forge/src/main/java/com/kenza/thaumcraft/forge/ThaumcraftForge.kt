@@ -1,10 +1,10 @@
 package com.kenza.thaumcraft.forge
 
-import com.kenza.thaumcraft.MOD_ID
 import com.kenza.thaumcraft.ThaumcraftCommon
 import com.kenza.thaumcraft.commonPlatformHelper
 import dev.architectury.platform.forge.EventBuses
 import io.github.cottonmc.cotton.gui.impl.LibGuiCommon
+import io.kenza.support.utils.reg.Ref.MOD_ID
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.data.event.GatherDataEvent
@@ -17,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
 
-@Mod(MOD_ID)
+@Mod("thaumcraft")
 class ThaumcraftForge {
     init {
         commonPlatformHelper = CommonPlatformHelperForge()

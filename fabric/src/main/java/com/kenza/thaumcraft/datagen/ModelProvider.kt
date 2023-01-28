@@ -1,7 +1,9 @@
 package com.kenza.thaumcraft.datagen
 
 import io.kenza.support.utils.getRegBlock
+import io.kenza.support.utils.getRegItem
 import io.kenza.support.utils.identifier
+import io.kenza.support.utils.reg.Ref.DATAGEN_SIMPLE_ITEMS
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.block.Block
@@ -11,6 +13,7 @@ import net.minecraft.block.StairsBlock
 import net.minecraft.data.client.*
 import net.minecraft.data.client.BlockStateModelGenerator.createSlabBlockState
 import net.minecraft.data.client.BlockStateModelGenerator.createStairsBlockState
+import net.minecraft.item.Item
 
 
 class ModelProvider(dataGenerator: FabricDataGenerator?) : FabricModelProvider(dataGenerator) {
@@ -75,6 +78,10 @@ class ModelProvider(dataGenerator: FabricDataGenerator?) : FabricModelProvider(d
 
 
     override fun generateItemModels(itemModelGenerator: ItemModelGenerator) {
+
+        DATAGEN_SIMPLE_ITEMS.map { it.getRegItem<Item>() }.forEach { id ->
+            itemModelGenerator.register(id,  Models.GENERATED)
+        }
 //        itemModelGenerator.register(ModItems.EIGHT_BALL, Models.GENERATED)
     }
 }

@@ -37,8 +37,8 @@ dependencies {
 //    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
 //    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
-    common(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
+    implementation(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":kenzaMcApi", configuration: "transformProductionFabric")) { transitive false }
 
     modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
@@ -54,6 +54,7 @@ dependencies {
     modImplementation ("io.github.cottonmc:LibGui:6.0.1+1.19")
     include ("io.github.cottonmc:LibGui:6.0.1+1.19")
 
+    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }

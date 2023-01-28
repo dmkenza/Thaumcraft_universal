@@ -4,6 +4,8 @@ import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.reg.STONE_SETTINGS
+import com.kenza.thaumcraft.render.ArcanePedestalBlockEntityRenderer
+import dev.architectury.platform.Platform
 import io.kenza.support.utils.identifier
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
@@ -18,15 +20,16 @@ import io.kenza.support.utils.reg.Ref.SCREEN_HANDLERS
 import io.kenza.support.utils.reg.Ref.SOUNDS_EVENTS
 import io.kenza.support.utils.reg.Ref.VILLAGER_PROFESSIONS
 import io.kenza.support.utils.reg.Ref._MOD_ID
+import net.fabricmc.api.EnvType
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
+import net.minecraft.util.Rarity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
-
 
 object ThaumcraftCommon {
 
@@ -50,10 +53,27 @@ object ThaumcraftCommon {
         Registries.get(MOD_ID)
     }
 
+    val items = listOf(
+        "salis_mundus", "elemental_sword", "elemental_axe", "elemental_shovel", "elemental_pick", "elemental_hoe",
+        "focus_pouch" , "goggles_revealing", "shard", "thaumonomicon", "traveller_boots"
+    )
+
     fun onInitialize() {
 
         MOD_TAB = commonPlatformHelper.registerCreativeModeTab(identifier("thaumcraft_tab")) {
             Blocks.JUKEBOX.asItem().defaultStack
+        }
+
+        items.forEach {
+
+            val itemSettings = Item.Settings()
+                .maxCount(1)
+                .group(MOD_TAB)
+
+            identifier(it).apply {
+                item { Item(itemSettings) }
+                itemDataGen()
+            }
         }
 
         identifier("arcane_stone").apply {
@@ -89,12 +109,14 @@ object ThaumcraftCommon {
 //                    STONE_SETTINGS
 //                )
 //            }
-            val block =  { ArcanePedestalBlock(
-                this,
-                STONE_SETTINGS
-            )}
+            val block = {
+                ArcanePedestalBlock(
+                    this,
+                    STONE_SETTINGS
+                )
+            }
 
-            blockEntityType{
+            blockEntityType {
                 BlockEntityType.Builder.create(
                     { pos: BlockPos, state: BlockState ->
                         ArcanePedestalBlockEntity(
@@ -102,15 +124,18 @@ object ThaumcraftCommon {
                             pos,
                             state
                         )
-                    },  this.getRegBlock<Block>()!!.get()
+                    }, this.getRegBlock<Block>()!!.get()
                 ).build(null)
             }
 
             blockAndItem(block)
 
-            blockEntityTypeRender{
-                ArcanePedestalBlockEntityRenderer()
+            if (Platform.getEnv() == EnvType.CLIENT) {
+                blockEntityTypeRender {
+                    ArcanePedestalBlockEntityRenderer()
+                }
             }
+
         }
 
 
