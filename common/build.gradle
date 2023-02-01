@@ -5,6 +5,9 @@ architectury {
 loom {
     accessWidenerPath = file("src/main/resources/thaumcraft.aw")
 }
+def dataOutput = '../common/src/main/generated'
+
+sourceSets { main { resources { srcDirs += dataOutput } } }
 
 dependencies {
 //    modImplementation fileTree(dir: 'libs', include: ['*.jar'])

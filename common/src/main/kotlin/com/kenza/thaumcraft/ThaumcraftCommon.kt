@@ -3,6 +3,8 @@ package com.kenza.thaumcraft
 import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
+import com.kenza.thaumcraft.reg.ELEMENTAL_PICK
+import com.kenza.thaumcraft.reg.SALIS_MUNDUS_ITEM
 import com.kenza.thaumcraft.reg.STONE_SETTINGS
 import com.kenza.thaumcraft.render.ArcanePedestalBlockEntityRenderer
 import dev.architectury.platform.Platform
@@ -10,6 +12,7 @@ import io.kenza.support.utils.identifier
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
 import io.kenza.support.utils.*
+import io.kenza.support.utils.reg.DEFAULT_SINGLE_ITEM_SETTING
 import io.kenza.support.utils.reg.Ref.BLOCKS
 import io.kenza.support.utils.reg.Ref.BLOCK_ENTITY_TYPES
 import io.kenza.support.utils.reg.Ref.ITEMS
@@ -23,10 +26,12 @@ import io.kenza.support.utils.reg.Ref._MOD_ID
 import net.fabricmc.api.EnvType
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
-import net.minecraft.util.Rarity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
@@ -54,7 +59,7 @@ object ThaumcraftCommon {
     }
 
     val items = listOf(
-        "salis_mundus", "elemental_sword", "elemental_axe", "elemental_shovel", "elemental_pick", "elemental_hoe",
+         "elemental_sword", "elemental_axe", "elemental_shovel","elemental_hoe",
         "focus_pouch" , "goggles_revealing", "shard", "thaumonomicon", "traveller_boots"
     )
 
@@ -64,14 +69,33 @@ object ThaumcraftCommon {
             Blocks.JUKEBOX.asItem().defaultStack
         }
 
-        items.forEach {
+        identifier( "elemental_pick").apply {
+            ELEMENTAL_PICK = item { Item(DEFAULT_SINGLE_ITEM_SETTING) }
+            itemDataGen()
+        }
 
-            val itemSettings = Item.Settings()
+        identifier("salis_mundus").apply {
+
+            val foodComponent = FoodComponent.Builder()
+                .hunger(10)
+                .alwaysEdible()
+                .saturationModifier(10f)
+                .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 200, 1), 0.6f)
+                .build()
+
+            SALIS_MUNDUS_ITEM = item { SalisMundusItem(Item.Settings()
                 .maxCount(1)
+                .food(foodComponent)
                 .group(MOD_TAB)
+            )}
 
+            itemDataGen()
+
+        }
+
+        items.forEach {
             identifier(it).apply {
-                item { Item(itemSettings) }
+                item { Item(DEFAULT_SINGLE_ITEM_SETTING) }
                 itemDataGen()
             }
         }
@@ -130,13 +154,13 @@ object ThaumcraftCommon {
 
             blockAndItem(block)
 
-            if (Platform.getEnv() == EnvType.CLIENT) {
+            clientRun {
                 blockEntityTypeRender {
                     ArcanePedestalBlockEntityRenderer()
                 }
             }
-
         }
+
 
 
         finishInit()

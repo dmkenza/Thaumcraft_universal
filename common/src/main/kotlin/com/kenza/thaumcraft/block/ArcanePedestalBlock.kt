@@ -1,12 +1,16 @@
 package com.kenza.thaumcraft.block
 
 import com.google.common.collect.ImmutableMap
+import com.kenza.thaumcraft.process.MagicTransformProcess.arcaneItemTransform
+import com.kenza.thaumcraft.process.MagicTransformProcess.isTransformer
 import io.kenza.support.utils.getRegBlockEntityType
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
@@ -69,12 +73,23 @@ class ArcanePedestalBlock(
         hand: Hand,
         hitResult: BlockHitResult,
     ): ActionResult {
+        MinecraftClient.getInstance()
         if (world.isClient) return ActionResult.SUCCESS
 
         val slot = 0
-        val blockEntity: ArcanePedestalBlockEntity? = world.getBlockEntity(pos) as? ArcanePedestalBlockEntity
+        val blockEntity: ArcanePedestalBlockEntity =
+            (world.getBlockEntity(pos) as? ArcanePedestalBlockEntity) ?: return  ActionResult.PASS
 
-        val itemStackInSlot = blockEntity?.items?.getOrNull(slot)
+
+        val itemStackInSlot = blockEntity.items.getOrNull(slot)
+
+        if(isTransformer(player.mainHandStack)){
+            (player as? ServerPlayerEntity)?.let {
+                arcaneItemTransform(player, blockEntity, state, world, pos)
+            }
+            return  ActionResult.SUCCESS
+        }
+
 
         if (itemStackInSlot?.isEmpty == true) {
             blockEntity.items.set(slot, player.mainHandStack.copy())
