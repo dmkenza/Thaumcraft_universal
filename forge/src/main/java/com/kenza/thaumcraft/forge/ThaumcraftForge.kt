@@ -4,7 +4,7 @@ import com.kenza.thaumcraft.ThaumcraftCommon
 import com.kenza.thaumcraft.commonPlatformHelper
 import dev.architectury.platform.forge.EventBuses
 import io.github.cottonmc.cotton.gui.impl.LibGuiCommon
-import io.kenza.support.utils.reg.Ref.MOD_ID
+import kenza.Ref.MOD_ID
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.data.event.GatherDataEvent
@@ -20,12 +20,14 @@ import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 @Mod("thaumcraft")
 class ThaumcraftForge {
     init {
+
+
         commonPlatformHelper = CommonPlatformHelperForge()
 
         // Submit our event bus to let architectury register our content on the right time
         val bus = MOD_CONTEXT.getKEventBus();
 //        val bus = FMLJavaModLoadingContext.get().modEventBus
-        EventBuses.registerModEventBus(MOD_ID, bus)
+        EventBuses.registerModEventBus("thaumcraft", bus)
         bus.addListener { event: FMLCommonSetupEvent -> setup(event) }
 //        bus.addListener { event: GatherDataEvent -> DataGen.init(event) }
         LibGuiCommon.onInitialize()
@@ -33,15 +35,20 @@ class ThaumcraftForge {
 
 //        ModRegistries.INSTANCE.onInit();
         MinecraftForge.EVENT_BUS.register(this)
-        DistExecutor.safeRunWhenOn(Dist.CLIENT) {
-            DistExecutor.SafeRunnable(
-                ThaumcraftForgeClient::init
-            )
-        }
+
+
+
     }
 
     private fun setup(event: FMLCommonSetupEvent) {
-        event.enqueueWork {}
+        event.enqueueWork {
+            DistExecutor.safeRunWhenOn(Dist.CLIENT) {
+                DistExecutor.SafeRunnable(
+                    ThaumcraftForgeClient::init
+                )
+            }
+
+        }
     }
 
     companion object {

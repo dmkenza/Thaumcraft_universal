@@ -5,6 +5,7 @@ import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.kenza.support.utils.base.*
+import io.kenza.support.utils.chatMsg
 import io.kenza.support.utils.getRegBlockEntityType
 import io.kenza.support.utils.mc
 import io.kenza.support.utils.reg.Ref
@@ -53,7 +54,8 @@ object ThaumcraftCommonClient : BaseModInitializer() {
                 is KeyAction.ActionDown -> {
 //                    if(radialMenuScreen == null){
 //                    }
-                    radialMenuScreen = RadialMenuScreen(mapping)
+                    chatMsg("x")
+                    radialMenuScreen = RadialMenuScreen1(mapping)
 //                    radialMenuScreen = InsetsTestGui()
                     openScreen (
                         radialMenuScreen!!

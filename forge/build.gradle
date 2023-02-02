@@ -18,6 +18,15 @@ sourceSets {
     }
 }
 
+repositories {
+    // Add KFF Maven repository
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
+}
+
+
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
@@ -47,16 +56,24 @@ loom {
 }
 
 configurations {
+    shade
     shadow
     common
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom shade
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentForge.extendsFrom common
 }
 
 dependencies {
-    api(project(":kenzaMcApi"))
+//    modApi(project(":kenzaMcApi")) {
+//        transitive false
+//    }
+
+//    implementation(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
+
+    implementation 'thedarkcolour:kotlinforforge:3.9.1'
 
     modImplementation fileTree(dir: 'libs', include: ['*.jar'])
     modImplementation fileTree(dir: 'libs_mods', include: ['*.jar'])
@@ -70,6 +87,14 @@ dependencies {
 
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+
+//    shade(project(path: ":kenzaMcApi", configuration: "namedElements")) {
+//        transitive false
+//    }
+//
+//    shadowCommon(project(path: ":kenzaMcApi", configuration: "transformProductionForge")) {
+//        transitive = false
+//    }
 
     common(project(path: ":common", configuration: "namedElements")) {
         transitive false

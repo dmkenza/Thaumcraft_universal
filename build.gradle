@@ -1,9 +1,12 @@
 
 
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
+//    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "architectury-plugin" version "3.4.143"
+//    id("dev.architectury.loom") version "1.0.302" apply false
     id "io.github.juuxel.loom-quiltflower" version "1.8.0" apply false
     id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+//    id "dev.architectury.loom" version "1.0.302" apply false
     id "org.jetbrains.kotlin.jvm" //version "${kotlin_version}"
     id "io.github.pacifistmc.forgix" version "1.2.6"
     id "com.github.johnrengelman.shadow" version "7.1.2"
@@ -43,8 +46,12 @@ subprojects {
 //        api "blue.endless:jankson:1.2.1"
 //        modImplementation("blue.endless:jankson:1.2.1")
 //        shade 'blue.endless:jankson:1.2.1'
-
-//        shade 'org.joml:joml:1.10.5'
+        if (path != ":kenzaMcApi") {
+//            implementation(project(path: ":kenzaMcApi", configuration: "namedElements")) {
+//                transitive false
+//            }
+//            include(project(path: ":kenzaMcApi"))
+        }
 //        include 'org.joml:joml:1.10.5'
     }
 
