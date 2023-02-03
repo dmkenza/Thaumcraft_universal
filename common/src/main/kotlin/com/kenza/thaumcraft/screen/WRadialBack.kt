@@ -1,7 +1,8 @@
 package com.kenza.thaumcraft.screen
 
-import com.kenza.thaumcraft.Debug.x1
-import io.github.cottonmc.cotton.gui.client.ScreenDrawing
+import com.kenza.thaumcraft.Debug.*
+import com.kenza.thaumcraft.KScreenDrawing
+import dev.architectury.core.item.ArchitecturyBucketItem
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.kenza.support.utils.identifier
 import io.kenza.support.utils.mc
@@ -11,23 +12,21 @@ import net.minecraft.util.math.Quaternion
 import net.minecraft.util.math.Vec3f
 import org.apache.logging.log4j.LogManager
 
-class WHudTest : WWidget() {
+class WRadialBack (val delegate: RadialDelegate) : WWidget() {
 
     val TEXTURE = identifier("textures/misc/radial.png")
     val TEXTURE2 = identifier("textures/misc/radial2.png")
 
-    var time = System.nanoTime()
-    val scale = 1.1f
 
     override fun paint(matrices: MatrixStack, x: Int, y: Int, mouseX: Int, mouseY: Int) {
 //        ScreenDrawing.coloredRect(matrices, x, y, width, height, -0xff0100)
+
         val gameTime = (mc.world?.time?.toFloat() ?: 0.0f)
-        val spin = (gameTime) / 44.0f
+        val spin = (gameTime) / 40.0f
+        val radialAnim = delegate.onRadialAnimRequested()
 
-        println("time ${time} $scale")
-
-        renderRadial(matrices, x, y, spin, scale, this.TEXTURE)
-        renderRadial(matrices, x, y, -spin, scale, this.TEXTURE2)
+        renderRadial(matrices, x, y, spin, radialAnim, this.TEXTURE)
+        renderRadial(matrices, x, y, -spin, radialAnim, this.TEXTURE2)
 
     }
 
@@ -36,7 +35,6 @@ class WHudTest : WWidget() {
 
     private fun renderRadial(matrices: MatrixStack, x: Int, y: Int, spin: Float, scale: Float, texture: Identifier) {
         matrices.push()
-
         val rotation = Quaternion(Vec3f(0.0f, 0.0f, 1.0f), spin, false)
 
         //rotate around center and scale
@@ -47,7 +45,7 @@ class WHudTest : WWidget() {
             translate(((-(width + x) / 2.0)) - x / 2, -((height + y) / 2.0) - y / 2, 0.0)
 
         }
-        ScreenDrawing.texturedGuiRect(matrices, x, y, width, height, texture, x1)
+        KScreenDrawing.texturedRect(matrices, x, y, width, height, texture, x4 , 1.0f )
         matrices.pop()
     }
 

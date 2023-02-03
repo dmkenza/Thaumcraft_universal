@@ -1,6 +1,8 @@
 package com.kenza.thaumcraft
 
+import com.kenza.thaumcraft.MixinFields.unbindAll_KeyBinding_enabled
 import com.kenza.thaumcraft.screen.ClientScreen
+import com.kenza.thaumcraft.screen.RadialMenuGui
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
@@ -18,7 +20,7 @@ import org.lwjgl.glfw.GLFW
 
 object ThaumcraftCommonClient : BaseModInitializer() {
 
-    var radialMenuScreen: LightweightGuiDescription? = null
+    var radialMenuScreen: RadialMenuGui? = null
 ////        RadilMenuScreen()
 ////        ScrollingTestGui()
 ////    }a
@@ -49,23 +51,29 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 ////            Text.literal("RadialMenuScreen")
 //        )
 
+        RadialMenuGui(mapping)
+
         keyBinding(mapping) {
             when (it) {
                 is KeyAction.ActionDown -> {
-//                    if(radialMenuScreen == null){
-//                    }
-                    chatMsg("x")
-                    radialMenuScreen = RadialMenuScreen1(mapping)
-//                    radialMenuScreen = InsetsTestGui()
+
+                    if(mc.currentScreen is ClientScreen){
+                        return@keyBinding
+                    }
+
+                    radialMenuScreen = RadialMenuGui(mapping)
+                    unbindAll_KeyBinding_enabled = false
                     openScreen (
                         radialMenuScreen!!
                     )
+                    unbindAll_KeyBinding_enabled = true
                 }
                 is KeyAction.ActionHold -> {
-//                    radialMenuScreen.onKeyPressed()
                 }
-
-                else -> {}
+                is KeyAction.ActionUp -> {
+                }
+                else -> {
+                }
             }
         }
 

@@ -39,7 +39,7 @@ class ArcanePedestalBlockEntityRenderer : BlockEntityRenderer<ArcanePedestalBloc
         matrices.translate(0.5, 1.3 + (bob / 4f), 0.5)
         matrices.scale(1.25f, 1.25f, 1.25f)
 
-        val spin = (gameTime) / 100.0f
+        val spin = (gameTime) / 20.0f
         val rotation = Quaternion(Vec3f(0.0f, 1.0f, 0.0f), spin, false)
         matrices.multiply(rotation)
         mc.itemRenderer.renderItem(
