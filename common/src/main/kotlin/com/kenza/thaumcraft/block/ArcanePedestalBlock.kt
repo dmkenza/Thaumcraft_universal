@@ -82,7 +82,6 @@ class ArcanePedestalBlock(
 
 
         val itemStackInSlot = blockEntity.items.getOrNull(slot)
-
         if(isTransformer(player.mainHandStack)){
             (player as? ServerPlayerEntity)?.let {
                 arcaneItemTransform(player, blockEntity, state, world, pos)

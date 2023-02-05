@@ -26,8 +26,8 @@ loom {
 
 dependencies {
 //    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation fileTree(dir: 'libs_dev', include: ['*.jar'])
-
+    modImplementation fileTree(dir: 'libs_dev', include: ['*.jar'])
+    implementation 'com.google.code.gson:gson:2.10.1'
 //   implementation(project(":kenzaMcApi")
 //    modApi project(path: ':kenzaMcApi')
 //    include(project(":kenzaMcApi"))
@@ -46,12 +46,12 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
-    modImplementation("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
 
     modImplementation "org.joml:joml:1.10.5"
     include "org.joml:joml:1.10.5"
 
-//    modImplementation ("io.github.cottonmc:LibGui:6.0.1+1.19")
+
+    modImplementation ("io.github.cottonmc:LibGui:6.0.1+1.19")
 }
 
 publishing {

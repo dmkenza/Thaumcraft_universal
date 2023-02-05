@@ -1,17 +1,13 @@
-package com.kenza.thaumcraft
+package com.kenza.thaumcraft.item
 
 import io.kenza.support.utils.chatMsg
-import io.kenza.support.utils.toVec3d
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnReason
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import java.util.function.BiFunction
 
 class SalisMundusItem(settings: Settings) : Item(settings) {
 

@@ -3,12 +3,12 @@ package com.kenza.thaumcraft
 import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
+import com.kenza.thaumcraft.item.ElementalPickItem
+import com.kenza.thaumcraft.item.SalisMundusItem
 import com.kenza.thaumcraft.reg.ELEMENTAL_PICK
 import com.kenza.thaumcraft.reg.SALIS_MUNDUS_ITEM
 import com.kenza.thaumcraft.reg.STONE_SETTINGS
 import com.kenza.thaumcraft.render.ArcanePedestalBlockEntityRenderer
-import dev.architectury.platform.Platform
-import io.kenza.support.utils.identifier
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
 import io.kenza.support.utils.*
@@ -23,7 +23,6 @@ import io.kenza.support.utils.reg.Ref.SCREEN_HANDLERS
 import io.kenza.support.utils.reg.Ref.SOUNDS_EVENTS
 import io.kenza.support.utils.reg.Ref.VILLAGER_PROFESSIONS
 import io.kenza.support.utils.reg.Ref._MOD_ID
-import net.fabricmc.api.EnvType
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.effect.StatusEffectInstance
@@ -34,6 +33,10 @@ import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
+import potionstudios.byg.common.item.BYGCreativeTab
+import potionstudios.byg.common.item.BYGCreativeTab.CREATIVE_TAB
+import potionstudios.byg.common.item.BYGTier
+import potionstudios.byg.mixin.access.PickaxeItemAccess
 import java.util.function.Supplier
 
 object ThaumcraftCommon {
@@ -65,12 +68,19 @@ object ThaumcraftCommon {
 
     fun onInitialize() {
 
+
         MOD_TAB = commonPlatformHelper.registerCreativeModeTab(identifier("thaumcraft_tab")) {
             Blocks.JUKEBOX.asItem().defaultStack
         }
 
         identifier( "elemental_pick").apply {
-            ELEMENTAL_PICK = item { Item(DEFAULT_SINGLE_ITEM_SETTING) }
+
+            ELEMENTAL_PICK = item {
+                ElementalPickItem(
+                    BYGTier.PENDORITE, 2, -2.8f, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
             itemDataGen()
         }
 
@@ -87,7 +97,8 @@ object ThaumcraftCommon {
                 .maxCount(1)
                 .food(foodComponent)
                 .group(MOD_TAB)
-            )}
+            )
+            }
 
             itemDataGen()
 
