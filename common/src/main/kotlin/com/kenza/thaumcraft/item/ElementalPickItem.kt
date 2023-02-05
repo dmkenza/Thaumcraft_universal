@@ -13,13 +13,12 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.PickaxeItem
 import net.minecraft.item.ToolMaterial
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.RaycastContext
 import net.minecraft.world.World
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
@@ -51,42 +50,37 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
 
 
     override fun useOnBlock(context: ItemUsageContext?): ActionResult {
-
-        context?.world!!.playSound(
-            null,
-            context?.player?.blockPos,
-            SoundFX.neutralization.soundEvent,
-            SoundCategory.AMBIENT,
-            1f,
-            1f
-        )
-
         with(context) {
+            val itemStack = context?.player?.getStackInHand(context.hand) ?: return@with
 
             if (!Screen.hasShiftDown()) {
                 scanOreByPick(context)
+                if(context.player?.isCreative != true){
+                    itemStack.incremenDamage()
+                }
                 return@with
             }
 
-            val itemStack = context?.player?.getStackInHand(context.hand) ?: return@with
             val blockState = context.blockPos?.run {
                 context.world?.getBlockState(this)
             }
 
-            if (blockState?.block is OreBlock) {
-                itemStack.changeData<ElementalPickItemData> {
-                    it.copy(
-                        selectedOreRawId = blockState.block.id().toString()
-                    ).also {
-                        chatMsg(it.selectedOreRawId!!)
-                    }
-                }
+            val selectedOreRawId = if (blockState?.block is OreBlock) {
+                blockState.block.id().toString()
+            }else{
+                null
+            }
+
+            itemStack.changeData<ElementalPickItemData> {
+                it.copy(
+                    selectedOreRawId = selectedOreRawId
+                )
             }
             context.player?.setStackInHand(context.hand, itemStack.copy())
         }
 
 
-        return super.useOnBlock(context)
+        return ActionResult.SUCCESS// super.useOnBlock(context)
     }
 
 
@@ -99,6 +93,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
     ) = with(context) {
 
         val itemStack = context?.player?.getStackInHand(context.hand) ?: return@with
+        val player = context.player ?: return@with
         val world = this@with?.world ?: return@with
         val selectedOreId = itemStack.readData<ElementalPickItemData>().selectedOreId ?: return@with
 
@@ -107,18 +102,26 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
 
         val blockPos = kotlin.runCatching { context.blockPos?.toVec3d() }.getOrNull() ?: return@with
 
-        val blocks = (1..5).map { t ->
+//        val oreRange = 5 + KMath.getBetween(0, 4)
+        val oreRange = 9 + KMath.getBetween(0, 4)
+        val blocks = (1..oreRange).map { t ->
             val offsetX = side.offsetX * -1.0 * t + side.offsetX
             val offsetY = side.offsetY * -1.0 * t
             val offsetZ = side.offsetZ * -1.0 * t + side.offsetY
             val offsetX2 = (1 - side.offsetX.absoluteValue) * -1.0
-            val offsetY2 = (1 - side.offsetY.absoluteValue) * -1.0
+            var offsetY2 = (1 - side.offsetY.absoluteValue) * -1.0
             val offsetZ2 = (1 - side.offsetZ.absoluteValue) * -1.0
+
+
+            var offsetY3 = offsetY2.absoluteValue * 2 * t
+            if (offsetY3 > 2) {
+                offsetY3 = 2.0
+            }
+
             net.minecraft.util.math.Box.of(
                 blockPos
-                    .center()
-                    .add(offsetX, offsetY, offsetZ),
-                offsetX2 * 2 * t, (offsetY2 + t), offsetZ2 * 2 * t
+                    .add(offsetX, offsetY , offsetZ),
+                offsetX2 * 2 * t, (offsetY3), offsetZ2 * 2 * t
             )
         }.map {
             net.minecraft.util.math.BlockPos.stream(it).map {
@@ -129,47 +132,96 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
             acc
         }
 
+        val MIN_SCORE_ACTIVATION = 0.1
+
 //            if (isRenderThread()) {
         blocks.apply {
-            map { pos ->
-                val pos = pos.toVec3d().center()
-                context.world?.addParticle(
-                    net.minecraft.particle.ParticleTypes.FLAME, pos.getX().toDouble(),
-                    pos.getY().toDouble(), pos.getZ().toDouble(),
-                    0.0, 0.0005, 0.0
-                )
-            }
-            val score = map { pos ->
+//            map { pos ->
+//                val pos = pos.toVec3d().center()
+//
+//                context.world?.addParticle(
+//                    net.minecraft.particle.ParticleTypes.FLAME, pos.getX().toDouble(),
+//                    pos.getY().toDouble(), pos.getZ().toDouble(),
+//                    0.0, 0.0005, 0.0
+//                )
+//            }
+
+            val blocksScore = mapNotNull { pos ->
                 val bs = world.getBlockState(pos)
+
                 if (bs.block.id() == selectedOreId) {
-                    1.0
+                    val distance = pos.toVec3d().distanceTo(blockPos) - 1
+                    var incrementalValue = ((oreRange - distance) / oreRange)
+
+//                    if (incrementalValue <= 0.1) {
+//                        incrementalValue = 0.1
+//                    }
+                    incrementalValue
                 } else {
-                    0.0
+                    null
                 }
             }.sum()
 
-            if (score >= 1) {
+//            if (blocksScore <= 0.5) {
+//                return@with
+//            }
 
-                chatMsg("test")
-                world.playSound(
-                    null,
-                    player?.blockPos,
-                    SoundFX.neutralization.soundEvent,
-                    SoundCategory.AMBIENT,
-                    1f,
-                    1f
-                )
+
+            var isEmitAction = false
+            var newScore: Float
+
+            itemStack.readData<ElementalPickItemData>().let {
+                newScore = if (it.actionScore >= 1) {
+                    isEmitAction = true
+                    0f
+                } else if (blocksScore <MIN_SCORE_ACTIVATION) {
+                    it.actionScore - KMath.getBetween(0.1f, 0.15f)
+                } else {
+                    it.actionScore + KMath.getBetween(0.34f, 0.5f)
+                }
+
+                if (newScore < 0f) {
+                    newScore = 0f
+                }
+
+
+                (player as? ServerPlayerEntity)?.let {
+                    itemStack.changeData<ElementalPickItemData> {
+                        it.copy(
+                            actionScore = newScore
+                        )
+                    }
+
+                    if (blocksScore <= MIN_SCORE_ACTIVATION) {
+                        return@with
+                    }
+
+//                    context.player?.setStackInHand(context.hand, itemStack)
+
+                    val soundVolume = blocksScore.cutByRange(0.3, 1.0).toFloat() - KMath.getBetween(0.0f, 0.05f)
+                    if (isEmitAction) {
+                        world.playSound(
+                            null,
+                            player.blockPos,
+                            SoundFX.neutralization.soundEvent,
+                            SoundCategory.AMBIENT,
+                            soundVolume,
+                            1f - KMath.getBetween(0f, 0.05f)
+                        )
+
+                    }
+                }
 
             }
         }
-//            }
-
     }
 }
+
 
 @NbtKey("elemental_pick_data")
 data class ElementalPickItemData(
     val selectedOreRawId: String? = null,
+    val actionScore: Float = 0f,
 ) {
     val selectedOreId: Identifier?
         get() = selectedOreRawId?.run(::identifier)

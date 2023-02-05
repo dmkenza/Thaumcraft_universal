@@ -1,4 +1,4 @@
-package com.kenza.thaumcraft.datagen
+package com.kenza.thaumcraft
 
 import io.kenza.support.utils.getRegBlock
 import io.kenza.support.utils.getRegItem
@@ -7,7 +7,6 @@ import io.kenza.support.utils.reg.Ref.DATAGEN_SIMPLE_ITEMS
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.block.Block
-import net.minecraft.block.Blocks
 import net.minecraft.block.SlabBlock
 import net.minecraft.block.StairsBlock
 import net.minecraft.data.client.*
