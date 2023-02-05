@@ -5,8 +5,11 @@ import com.kenza.thaumcraft.commonPlatformHelper
 import dev.architectury.platform.forge.EventBuses
 import io.github.cottonmc.cotton.gui.impl.LibGuiCommon
 import kenza.Ref.MOD_ID
+import net.minecraft.data.DataGenerator
+import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.common.data.SoundDefinition
 import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.common.Mod
@@ -21,6 +24,7 @@ import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 class ThaumcraftForge {
     init {
 
+//        SoundDefinition
 
         commonPlatformHelper = CommonPlatformHelperForge()
 

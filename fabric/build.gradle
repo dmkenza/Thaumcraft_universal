@@ -52,7 +52,9 @@ repositories {
 
 dependencies {
     modImplementation fileTree(dir: 'libs', include: ['*.jar'])
-//    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
+
+    modRuntimeOnly(fileTree(dir: 'libs_dev', include: ['*.jar']))
+    modImplementation("com.github.glitchfiend:TerraBlender-fabric:${project.terrablender_version}")
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
 //    implementation(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
 //    shadowCommon(project(path: ":kenzaMcApi", configuration: "transformProductionFabric")) { transitive false }
@@ -72,7 +74,6 @@ dependencies {
 //    include("io.github.cottonmc:LibGui:6.0.1+1.19")
     modImplementation ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
     include ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
-
 
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
     implementation(project(path: ":common", configuration: "namedElements")) { transitive false }

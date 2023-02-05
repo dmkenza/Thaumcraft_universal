@@ -8,6 +8,7 @@ import com.kenza.thaumcraft.item.SalisMundusItem
 import com.kenza.thaumcraft.reg.ELEMENTAL_PICK
 import com.kenza.thaumcraft.reg.SALIS_MUNDUS_ITEM
 import com.kenza.thaumcraft.reg.STONE_SETTINGS
+import com.kenza.thaumcraft.reg.SoundFX
 import com.kenza.thaumcraft.render.ArcanePedestalBlockEntityRenderer
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
@@ -71,6 +72,14 @@ object ThaumcraftCommon {
 
         MOD_TAB = commonPlatformHelper.registerCreativeModeTab(identifier("thaumcraft_tab")) {
             Blocks.JUKEBOX.asItem().defaultStack
+        }
+
+
+        SoundFX.values().map {
+
+            identifier(it.name).apply {
+                soundEvent()
+            }
         }
 
         identifier( "elemental_pick").apply {

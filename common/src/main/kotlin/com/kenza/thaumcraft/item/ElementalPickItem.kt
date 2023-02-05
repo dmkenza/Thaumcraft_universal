@@ -2,6 +2,7 @@ package com.kenza.thaumcraft.item
 
 import com.kenza.thaumcraft.MixinFields
 import com.kenza.thaumcraft.base.gson
+import com.kenza.thaumcraft.reg.SoundFX
 import io.kenza.support.utils.*
 import net.minecraft.block.BlockState
 import net.minecraft.block.OreBlock
@@ -12,6 +13,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.PickaxeItem
 import net.minecraft.item.ToolMaterial
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
@@ -47,12 +50,20 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
     }
 
 
-
     override fun useOnBlock(context: ItemUsageContext?): ActionResult {
+
+        context?.world!!.playSound(
+            null,
+            context?.player?.blockPos,
+            SoundFX.neutralization.soundEvent,
+            SoundCategory.AMBIENT,
+            1f,
+            1f
+        )
 
         with(context) {
 
-            if(!Screen.hasShiftDown()) {
+            if (!Screen.hasShiftDown()) {
                 scanOreByPick(context)
                 return@with
             }
@@ -62,7 +73,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
                 context.world?.getBlockState(this)
             }
 
-            if(blockState?.block is OreBlock){
+            if (blockState?.block is OreBlock) {
                 itemStack.changeData<ElementalPickItemData> {
                     it.copy(
                         selectedOreRawId = blockState.block.id().toString()
@@ -88,11 +99,11 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
     ) = with(context) {
 
         val itemStack = context?.player?.getStackInHand(context.hand) ?: return@with
-        val world =  this@with?.world ?: return@with
+        val world = this@with?.world ?: return@with
         val selectedOreId = itemStack.readData<ElementalPickItemData>().selectedOreId ?: return@with
 
-        val side = context.playerFacing?.opposite ?: return@with
-//        val side = this@with?.side ?: return@with
+//        val side = context.playerFacing?.opposite ?: return@with
+        val side = this@with.side ?: return@with
 
         val blockPos = kotlin.runCatching { context.blockPos?.toVec3d() }.getOrNull() ?: return@with
 
@@ -106,7 +117,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
             net.minecraft.util.math.Box.of(
                 blockPos
                     .center()
-                    .add(offsetX, offsetY , offsetZ),
+                    .add(offsetX, offsetY, offsetZ),
                 offsetX2 * 2 * t, (offsetY2 + t), offsetZ2 * 2 * t
             )
         }.map {
@@ -141,8 +152,12 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
 
                 chatMsg("test")
                 world.playSound(
-                    null, player?.blockPos,
-                    net.minecraft.sound.SoundEvents.UI_BUTTON_CLICK, net.minecraft.sound.SoundCategory.AMBIENT, 1f, 1f
+                    null,
+                    player?.blockPos,
+                    SoundFX.neutralization.soundEvent,
+                    SoundCategory.AMBIENT,
+                    1f,
+                    1f
                 )
 
             }
