@@ -11,9 +11,7 @@ import net.minecraft.world.World
 
 class SalisMundusItem(settings: Settings) : Item(settings) {
 
-
     override fun finishUsing(stack: ItemStack?, world: World?, user: LivingEntity?): ItemStack {
-        chatMsg("magic")
         val serverWorld = world as? ServerWorld
 //        if (isClientSide()) {
 //            return super.finishUsing(stack, world, user)

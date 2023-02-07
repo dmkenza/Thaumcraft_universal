@@ -3,12 +3,10 @@ package com.kenza.thaumcraft
 import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
-import com.kenza.thaumcraft.item.ElementalPickItem
-import com.kenza.thaumcraft.item.SalisMundusItem
-import com.kenza.thaumcraft.reg.ELEMENTAL_PICK
-import com.kenza.thaumcraft.reg.SALIS_MUNDUS_ITEM
-import com.kenza.thaumcraft.reg.STONE_SETTINGS
-import com.kenza.thaumcraft.reg.SoundFX
+import com.kenza.thaumcraft.item.*
+import com.kenza.thaumcraft.item.armor.KArmorItem
+import com.kenza.thaumcraft.reg.*
+import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.ARCANE
 import com.kenza.thaumcraft.render.ArcanePedestalBlockEntityRenderer
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
@@ -26,6 +24,7 @@ import io.kenza.support.utils.reg.Ref.VILLAGER_PROFESSIONS
 import io.kenza.support.utils.reg.Ref._MOD_ID
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
@@ -34,10 +33,8 @@ import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
-import potionstudios.byg.common.item.BYGCreativeTab
-import potionstudios.byg.common.item.BYGCreativeTab.CREATIVE_TAB
+import potionstudios.byg.common.item.BYGArmorMaterial
 import potionstudios.byg.common.item.BYGTier
-import potionstudios.byg.mixin.access.PickaxeItemAccess
 import java.util.function.Supplier
 
 object ThaumcraftCommon {
@@ -63,8 +60,7 @@ object ThaumcraftCommon {
     }
 
     val items = listOf(
-         "elemental_sword", "elemental_axe", "elemental_shovel","elemental_hoe",
-        "focus_pouch" , "goggles_revealing", "shard", "thaumonomicon", "traveller_boots"
+        "focus_pouch" , "shard", "thaumonomicon"
     )
 
     fun onInitialize() {
@@ -76,11 +72,72 @@ object ThaumcraftCommon {
 
 
         SoundFX.values().map {
-
             identifier(it.name).apply {
                 soundEvent()
             }
         }
+
+        identifier("traveller_boots").apply {
+            item {
+                KArmorItem(
+                    ARCANE, EquipmentSlot.FEET, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
+
+        identifier("goggles_revealing").apply {
+           item {
+               KArmorItem(
+                   ARCANE, EquipmentSlot.HEAD, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
+
+        identifier("elemental_hoe").apply {
+            ELEMENTAL_HOE = item {
+                ElementalHoeItem(
+                    BYGTier.PENDORITE, 0, 0.0f, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
+
+        identifier("elemental_shovel").apply {
+            ELEMENTAL_SHOVEL = item {
+                ElementalShovelItem(
+                    BYGTier.PENDORITE, 2.0f, -3.0f, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
+
+
+        identifier("elemental_axe").apply {
+            ELEMENTAL_AXE = item {
+                ElementalAxeItem(
+                    BYGTier.PENDORITE, 4f, -2.4f, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
+
+        identifier( "elemental_sword").apply {
+            ELEMENTAL_SWORD = item {
+                ElementalSwordItem(
+                    BYGTier.PENDORITE, 4, -2.4f, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
+
 
         identifier( "elemental_pick").apply {
 

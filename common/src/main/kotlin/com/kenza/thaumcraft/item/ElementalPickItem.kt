@@ -1,18 +1,15 @@
 package com.kenza.thaumcraft.item
 
 import com.kenza.thaumcraft.MixinFields
-import com.kenza.thaumcraft.base.gson
 import com.kenza.thaumcraft.reg.SoundFX
+import io.kenza.support.annotations.NbtKey
 import io.kenza.support.utils.*
 import net.minecraft.block.BlockState
 import net.minecraft.block.OreBlock
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ItemUsageContext
-import net.minecraft.item.PickaxeItem
-import net.minecraft.item.ToolMaterial
+import net.minecraft.item.*
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
 import net.minecraft.util.ActionResult
@@ -20,10 +17,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 import kotlin.math.absoluteValue
-import kotlin.reflect.full.findAnnotation
 
 
 class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed: Float, settsings: Settings?) :
@@ -41,6 +35,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
         pos: BlockPos?,
         miner: LivingEntity?,
     ): Boolean {
+
         (miner as? PlayerEntity)?.let {
             val itemContext = getItemContext(world, it, it.activeHand, pos)
             scanOreByPick(itemContext)
@@ -80,7 +75,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
         }
 
 
-        return ActionResult.SUCCESS// super.useOnBlock(context)
+        return ActionResult.CONSUME// super.useOnBlock(context)
     }
 
 
@@ -124,7 +119,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
                 offsetX2 * 2 * t, (offsetY3), offsetZ2 * 2 * t
             )
         }.map {
-            net.minecraft.util.math.BlockPos.stream(it).map {
+            BlockPos.stream(it).map {
                 it.mutableCopy()
             }.collectAsSet()
         }.reduce { acc, blockPos ->
@@ -227,30 +222,3 @@ data class ElementalPickItemData(
         get() = selectedOreRawId?.run(::identifier)
 }
 
-
-@Retention(RetentionPolicy.RUNTIME)
-annotation class NbtKey(val value: String)
-
-
-private inline fun <reified T> ItemStack?.readData(): T {
-    val key = T::class.findAnnotation<NbtKey>()?.value ?: throw Exception("Data Class should have NbtKey")
-    val data = readJsonNbt(key).run {
-        gson.fromJson(this, T::class.java) ?: T::class.createDefaultObject() as T
-    }
-    return data
-}
-
-
-private inline fun <reified T> ItemStack?.changeData(changeFun: (old: T) -> T): T {
-
-    val key = T::class.findAnnotation<NbtKey>()?.value ?: throw Exception("Data Class should have NbtKey")
-    val old = readJsonNbt(key).run {
-        gson.fromJson(this, T::class.java) ?: T::class.createDefaultObject() as T
-    }
-    val new = changeFun.invoke(old)
-
-    writeJsonNbt(key) {
-        gson.toJson(new)
-    }
-    return new
-}
