@@ -49,6 +49,9 @@
 include("fabric")
 include("forge")
 include ":kenzaMcApi"
+// includeFlat(":kenzaMcApi")
+//include ":mlp"
 project(":kenzaMcApi").projectDir = file("C:\\projects_mc\\support\\kenzaMcApi\\1_19_2")
+//project(":mlp").projectDir = file("C:\\projects_mc\\work\\MineLittlePony")
 
 rootProject.name = "Thaumcraft_universal"

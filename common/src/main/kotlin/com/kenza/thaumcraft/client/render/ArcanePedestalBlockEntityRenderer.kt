@@ -1,4 +1,4 @@
-package com.kenza.thaumcraft.render
+package com.kenza.thaumcraft.client.render
 
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import net.minecraft.client.MinecraftClient

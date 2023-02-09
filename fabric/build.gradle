@@ -9,9 +9,11 @@ architectury {
 }
 
 def dataOutput1 = '../common/src/main/generated'
-def dataOutput2 = '../common/src/main/resources'
 
 loom {
+//    tasks.withType(Jar) {
+//        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//    }
     accessWidenerPath = project(":common").loom.accessWidenerPath
     runs {
         datagen {
@@ -22,23 +24,33 @@ loom {
             runDir "build/datagen"
         }
     }
+
 }
+
+
 
 sourceSets { main { resources {
     srcDirs += dataOutput1
-    srcDirs += dataOutput2
+//    srcDirs += dataOutput2
 } } }
 
 configurations {
     common
+    common1
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    shadowCommon1 // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common
+
+    compileClasspath.extendsFrom common1
+    runtimeClasspath.extendsFrom common1
+    developmentFabric.extendsFrom common1
 }
 
 
 repositories {
+    mavenLocal()
     // DashLoader maven.
     maven {
         url = uri("https://oskarstrom.net/maven")
@@ -52,11 +64,19 @@ repositories {
 
 dependencies {
     modImplementation fileTree(dir: 'libs', include: ['*.jar'])
+    include "org.joml:joml:1.10.5"
+//    common1(project(path: ":kenzaMcApi", configuration: "namedElements")) {
+//        transitive false
+//    }
+
+    common1(project(path: ":kenzaMcApi"))
+    include(project(path: ":kenzaMcApi"))
 
     modRuntimeOnly(fileTree(dir: 'libs_dev', include: ['*.jar']))
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version}"
     modImplementation("com.github.glitchfiend:TerraBlender-fabric:${project.terrablender_version}")
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
-//    implementation(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
+//    modImplementation(project(path: ":mlp", configuration: "namedElements")) { transitive false }
 //    shadowCommon(project(path: ":kenzaMcApi", configuration: "transformProductionFabric")) { transitive false }
 
     modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
@@ -69,14 +89,23 @@ dependencies {
 //        exclude(group: "net.fabricmc.fabric-api")
 //    }
 
+//    modApi "dev.architectury:architectury:${rootProject.architectury_version}"
 
 //    modImplementation("io.github.cottonmc:LibGui:6.0.1+1.19")
 //    include("io.github.cottonmc:LibGui:6.0.1+1.19")
     modImplementation ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
     include ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
 
+//    modImplementation ("com.kenza:thaumcraft:0.0.1")
+    include ("com.kenza:thaumcraft:0.0.1")
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    include(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+//    include(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+//    include(project(path: ":common"))
 //    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
 //    modCompileOnly("net.oskarstrom:DashLoader:2.0-dev12")
@@ -110,6 +139,13 @@ remapJar {
 
 jar {
     classifier "dev"
+}
+tasks.withType(Tar){
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(Zip){
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 sourcesJar {

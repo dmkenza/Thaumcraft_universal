@@ -4,10 +4,9 @@ import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.item.*
-import com.kenza.thaumcraft.item.armor.KArmorItem
 import com.kenza.thaumcraft.reg.*
 import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.ARCANE
-import com.kenza.thaumcraft.render.ArcanePedestalBlockEntityRenderer
+import com.kenza.thaumcraft.client.render.ArcanePedestalBlockEntityRenderer
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
 import io.kenza.support.utils.*
@@ -60,7 +59,7 @@ object ThaumcraftCommon {
     }
 
     val items = listOf(
-        "focus_pouch" , "shard", "thaumonomicon"
+        "focus_pouch", "shard", "thaumonomicon"
     )
 
     fun onInitialize() {
@@ -78,8 +77,8 @@ object ThaumcraftCommon {
         }
 
         identifier("traveller_boots").apply {
-            item {
-                KArmorItem(
+            TRAVELLER_BOOTS = item {
+                ThaumcraftArmorItem(
                     ARCANE, EquipmentSlot.FEET, Item.Settings()
                         .group(MOD_TAB)
                 )
@@ -88,9 +87,9 @@ object ThaumcraftCommon {
         }
 
         identifier("goggles_revealing").apply {
-           item {
-               KArmorItem(
-                   ARCANE, EquipmentSlot.HEAD, Item.Settings()
+            GOGLES_REVEALING = item {
+                ThaumcraftArmorItem(
+                    ARCANE, EquipmentSlot.HEAD, Item.Settings()
                         .group(MOD_TAB)
                 )
             }
@@ -128,7 +127,7 @@ object ThaumcraftCommon {
             itemDataGen()
         }
 
-        identifier( "elemental_sword").apply {
+        identifier("elemental_sword").apply {
             ELEMENTAL_SWORD = item {
                 ElementalSwordItem(
                     BYGTier.PENDORITE, 4, -2.4f, Item.Settings()
@@ -139,7 +138,7 @@ object ThaumcraftCommon {
         }
 
 
-        identifier( "elemental_pick").apply {
+        identifier("elemental_pick").apply {
 
             ELEMENTAL_PICK = item {
                 ElementalPickItem(
@@ -159,11 +158,13 @@ object ThaumcraftCommon {
                 .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 200, 1), 0.6f)
                 .build()
 
-            SALIS_MUNDUS_ITEM = item { SalisMundusItem(Item.Settings()
-                .maxCount(1)
-                .food(foodComponent)
-                .group(MOD_TAB)
-            )
+            SALIS_MUNDUS_ITEM = item {
+                SalisMundusItem(
+                    Item.Settings()
+                        .maxCount(1)
+                        .food(foodComponent)
+                        .group(MOD_TAB)
+                )
             }
 
             itemDataGen()

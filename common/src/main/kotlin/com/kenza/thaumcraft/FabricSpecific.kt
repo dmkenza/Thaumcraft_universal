@@ -1,4 +1,4 @@
-package com.kenza.discholder
+package com.kenza.thaumcraft
 
 interface FabricSpecific {
     fun test1()

@@ -10,3 +10,6 @@ lateinit var ELEMENTAL_SWORD : RegistrySupplier<Item>
 lateinit var ELEMENTAL_AXE : RegistrySupplier<Item>
 lateinit var ELEMENTAL_SHOVEL : RegistrySupplier<Item>
 lateinit var ELEMENTAL_HOE : RegistrySupplier<Item>
+
+lateinit var TRAVELLER_BOOTS : RegistrySupplier<Item>
+lateinit var GOGLES_REVEALING : RegistrySupplier<Item>

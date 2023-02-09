@@ -1,21 +1,25 @@
 package com.kenza.thaumcraft
 
 import com.kenza.thaumcraft.MixinFields.unbindAll_KeyBinding_enabled
+import com.kenza.thaumcraft.client.render.ThaumcraftArmorRenderer
+import com.kenza.thaumcraft.reg.GOGLES_REVEALING
+import com.kenza.thaumcraft.reg.TRAVELLER_BOOTS
 import com.kenza.thaumcraft.screen.ClientScreen
 import com.kenza.thaumcraft.screen.RadialMenuGui
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.kenza.support.utils.base.*
-import io.kenza.support.utils.chatMsg
 import io.kenza.support.utils.getRegBlockEntityType
 import io.kenza.support.utils.mc
 import io.kenza.support.utils.reg.Ref
 import io.kenza.support.utils.reg.Ref.KEY_BINDINGS_MAP
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
 import org.lwjgl.glfw.GLFW
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
 
 
 object ThaumcraftCommonClient : BaseModInitializer() {
@@ -50,6 +54,12 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 //            mapping,
 ////            Text.literal("RadialMenuScreen")
 //        )
+
+        GeoArmorRenderer.registerArmorRenderer<ClientPlayerEntity>(
+            ThaumcraftArmorRenderer(),
+            TRAVELLER_BOOTS.get(),
+            GOGLES_REVEALING.get()
+        )
 
         RadialMenuGui(mapping)
 

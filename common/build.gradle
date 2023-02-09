@@ -1,19 +1,30 @@
 architectury {
     common(rootProject.enabled_platforms.split(","))
 }
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+
 def dataOutput = '../common/src/main/generated'
 
 loom {
     accessWidenerPath = file("src/main/resources/thaumcraft.aw")
-
     sourceSets {
         main {
-            java {
-                srcDirs += "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\src\\main\\java"
-            }
-            kotlin {
-                srcDirs += "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\src\\main\\kotlin"
-            }
+//            java {
+//                srcDirs += "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\src\\main\\java"
+//            }
+//            kotlin {
+//                srcDirs += "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\src\\main\\kotlin"
+//            }
             resources {
                 srcDirs += dataOutput
             }
@@ -21,24 +32,37 @@ loom {
     }
 }
 
-
-
+//repositories {
+////    includeFlat(":kenzaMcApi")
+//    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+//}
 
 dependencies {
 //    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
-    modImplementation fileTree(dir: 'libs_dev', include: ['*.jar'])
+    modCompileOnly fileTree(dir: 'libs_dev', include: ['*.jar'])
     implementation 'com.google.code.gson:gson:2.10.1'
-//   implementation(project(":kenzaMcApi")
+//    modCompileOnly(project(":kenzaMcApi"))
 //    modApi project(path: ':kenzaMcApi')
 //    include(project(":kenzaMcApi"))
+    common project(path: ':kenzaMcApi')
+//    shadowCommon project(path: ':kenzaMcApi')
 
 //    modImplementation(project(path: ":kenzaMcApi", configuration: "namedElements")) {
 //        transitive false
 //    }
 
+//    runtimeOnly(project(path: ":kenzaMcApi"))
+//    compileOnly(project(path: ":kenzaMcApi"))
+//    modCompileOnly(project(path: ":kenzaMcApi"))
+//    include(project(path: ":kenzaMcApi"))
+
+//    implementation ("com.kenza:thaumcraft:0.0.1")
+//    modCompileOnly(project(path: ":kenzaMcApi"))
+//    include("com.kenza:thaumcraft:0.0.1")
 //    include(project(":kenzaMcApi"))
 
     modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version}"
 //    include "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
@@ -48,10 +72,10 @@ dependencies {
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
 
     modImplementation "org.joml:joml:1.10.5"
-    include "org.joml:joml:1.10.5"
+//    include "org.joml:joml:1.10.5"
 
-
-    modImplementation ("io.github.cottonmc:LibGui:6.0.1+1.19")
+    modImplementation("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
+//    modImplementation ("io.github.cottonmc:LibGui:6.0.1+1.19")
 }
 
 publishing {

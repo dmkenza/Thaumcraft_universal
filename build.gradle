@@ -8,7 +8,7 @@ plugins {
     id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
 //    id "dev.architectury.loom" version "1.0.302" apply false
     id "org.jetbrains.kotlin.jvm" //version "${kotlin_version}"
-    id "io.github.pacifistmc.forgix" version "1.2.6"
+//    id "io.github.pacifistmc.forgix" version "1.2.6"
     id "com.github.johnrengelman.shadow" version "7.1.2"
 
 }
@@ -59,18 +59,18 @@ subprojects {
 //    assemble.finalizedBy(mergeJars)
 
 }
-forgix {
-    group = rootProject.group
-    mergedJarName = "${rootProject.archives_base_name}-${rootProject.mod_version}-universal+${rootProject.minecraft_version}.jar"
-    outputDir = "build/libs"
-
-    forge {
-        jarLocation = "build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}-forge+${rootProject.minecraft_version}.jar"
-    }
-    fabric {
-        jarLocation = "build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}-fabric+${rootProject.minecraft_version}.jar"
-    }
-}
+//forgix {
+//    group = rootProject.group
+//    mergedJarName = "${rootProject.archives_base_name}-${rootProject.mod_version}-universal+${rootProject.minecraft_version}.jar"
+//    outputDir = "build/libs"
+//
+//    forge {
+//        jarLocation = "build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}-forge+${rootProject.minecraft_version}.jar"
+//    }
+//    fabric {
+//        jarLocation = "build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}-fabric+${rootProject.minecraft_version}.jar"
+//    }
+//}
 
 allprojects {
     apply plugin: "java"
@@ -88,6 +88,7 @@ allprojects {
 
     repositories {
         mavenLocal()
+        maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
         maven {
             url = 'https://maven.terraformersmc.com/releases'
         }

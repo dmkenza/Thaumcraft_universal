@@ -56,14 +56,18 @@ loom {
 }
 
 configurations {
-    shade
     shadow
     common
+    common1
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
-    compileClasspath.extendsFrom shade
+    shadowCommon1 // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentForge.extendsFrom common
+
+    compileClasspath.extendsFrom common1
+    runtimeClasspath.extendsFrom common1
+    developmentFabric.extendsFrom common1
 }
 
 dependencies {
@@ -95,6 +99,15 @@ dependencies {
 //    shadowCommon(project(path: ":kenzaMcApi", configuration: "transformProductionForge")) {
 //        transitive = false
 //    }
+
+    common1(project(path: ":kenzaMcApi", configuration: "namedElements")) {
+        transitive false
+    }
+
+    shadowCommon1(project(path: ":kenzaMcApi", configuration: "transformProductionForge")) {
+        transitive false
+    }
+
 
     common(project(path: ":common", configuration: "namedElements")) {
         transitive false
