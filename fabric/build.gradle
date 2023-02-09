@@ -9,7 +9,7 @@ architectury {
 }
 
 def dataOutput1 = '../common/src/main/generated'
-
+def dataOutput2 = '../common/src/main/resources'
 loom {
 //    tasks.withType(Jar) {
 //        duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -31,7 +31,7 @@ loom {
 
 sourceSets { main { resources {
     srcDirs += dataOutput1
-//    srcDirs += dataOutput2
+    srcDirs += dataOutput2
 } } }
 
 configurations {
@@ -69,7 +69,8 @@ dependencies {
 //        transitive false
 //    }
 
-    common1(project(path: ":kenzaMcApi"))
+//    common1(project(path: ":kenzaMcApi"))
+    common1(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
     include(project(path: ":kenzaMcApi"))
 
     modRuntimeOnly(fileTree(dir: 'libs_dev', include: ['*.jar']))
@@ -97,13 +98,17 @@ dependencies {
     include ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
 
 //    modImplementation ("com.kenza:thaumcraft:0.0.1")
-    include ("com.kenza:thaumcraft:0.0.1")
+//    include ("com.kenza:thaumcraft:0.0.1")
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-//    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
-//    include(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+//    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
+    include(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+//    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    include(project(path: ":common"))
+//    implementation(project(path: ":common"))
+//    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
 //    include(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 //    include(project(path: ":common"))
 //    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }

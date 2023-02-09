@@ -57,7 +57,6 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 
         GeoArmorRenderer.registerArmorRenderer<ClientPlayerEntity>(
             ThaumcraftArmorRenderer(),
-            TRAVELLER_BOOTS.get(),
             GOGLES_REVEALING.get()
         )
 

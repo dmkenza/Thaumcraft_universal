@@ -64,8 +64,11 @@ class TArmorMaterials private constructor(
         //            SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.0f, 0.0f, () -> Ingredient.ofItems(ModItems.MYTHRIL_INGOT));
         private val MAX_DAMAGE_ARRAY: IntArray
 
-        val ARCANE = BYGArmorMaterial(
-            "arcane",
+//        val THAUMCRAFT_RESEARCHER_AM = createArmorMaterial ("thaumcraft_researcher")
+        val THAUMCRAFT_DEFAULT_AM = createArmorMaterial ("arcane")
+
+        fun createArmorMaterial(name: String) = BYGArmorMaterial(
+            name,
             39,
             intArrayOf(4, 7, 9, 4),
             15,
@@ -78,6 +81,7 @@ class TArmorMaterials private constructor(
                 )
             )
         }
+
 
         //            val PENDORITE = BYGArmorMaterial(
 //                "pendorite",

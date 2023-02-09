@@ -21,3 +21,4 @@ classes/
 *.jar_
 /forge/src/generated/resources/.cache/*
 /common/src/main/generated/
+/.architectury-transformer/

@@ -3,10 +3,10 @@ package com.kenza.thaumcraft
 import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
+import com.kenza.thaumcraft.client.render.ArcanePedestalBlockEntityRenderer
 import com.kenza.thaumcraft.item.*
 import com.kenza.thaumcraft.reg.*
-import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.ARCANE
-import com.kenza.thaumcraft.client.render.ArcanePedestalBlockEntityRenderer
+import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_DEFAULT_AM
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
 import io.kenza.support.utils.*
@@ -26,13 +26,13 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.item.ArmorItem
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
-import potionstudios.byg.common.item.BYGArmorMaterial
 import potionstudios.byg.common.item.BYGTier
 import java.util.function.Supplier
 
@@ -76,20 +76,20 @@ object ThaumcraftCommon {
             }
         }
 
-        identifier("traveller_boots").apply {
-            TRAVELLER_BOOTS = item {
-                ThaumcraftArmorItem(
-                    ARCANE, EquipmentSlot.FEET, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
+//        identifier("traveller_boots").apply {
+//            TRAVELLER_BOOTS = item {
+//                ArmorItem(
+//                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.FEET, Item.Settings()
+//                        .group(MOD_TAB)
+//                )
+//            }
+//            itemDataGen()
+//        }
 
         identifier("goggles_revealing").apply {
             GOGLES_REVEALING = item {
                 ThaumcraftArmorItem(
-                    ARCANE, EquipmentSlot.HEAD, Item.Settings()
+                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.HEAD, Item.Settings()
                         .group(MOD_TAB)
                 )
             }
