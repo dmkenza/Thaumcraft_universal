@@ -25,9 +25,9 @@ loom {
 //            kotlin {
 //                srcDirs += "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\src\\main\\kotlin"
 //            }
-            resources {
-                srcDirs += dataOutput
-            }
+//            resources {
+//                srcDirs += dataOutput
+//            }
         }
     }
 }

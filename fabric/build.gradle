@@ -22,17 +22,40 @@ loom {
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.output-dir=${file(dataOutput1)}"
             runDir "build/datagen"
+
+            sourceSets {
+                main {
+                    resources {
+//                        srcDirs += dataOutput1
+                        srcDirs += dataOutput2
+                    }
+                }
+            }
         }
+
+//        client {
+//            sourceSets {
+//                main {
+//                    resources {
+//                        srcDirs += dataOutput1
+//                        srcDirs += dataOutput2
+//                    }
+//                }
+//            }
+//        }
     }
 
 }
 
 
-
-sourceSets { main { resources {
-    srcDirs += dataOutput1
-//    srcDirs += dataOutput2
-} } }
+sourceSets {
+    main {
+        resources {
+            srcDirs += dataOutput1
+            srcDirs += dataOutput2
+        }
+    }
+}
 
 configurations {
     common
@@ -94,14 +117,15 @@ dependencies {
 
 //    modImplementation("io.github.cottonmc:LibGui:6.0.1+1.19")
 //    include("io.github.cottonmc:LibGui:6.0.1+1.19")
-    modImplementation ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
-    include ("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
+    modImplementation("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
+    include("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
 
 //    modImplementation ("com.kenza:thaumcraft:0.0.1")
 //    include ("com.kenza:thaumcraft:0.0.1")
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
@@ -119,6 +143,7 @@ dependencies {
 
 processResources {
     inputs.property "version", project.version
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
@@ -145,11 +170,11 @@ remapJar {
 jar {
     classifier "dev"
 }
-tasks.withType(Tar){
+tasks.withType(Tar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-tasks.withType(Zip){
+tasks.withType(Zip) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 

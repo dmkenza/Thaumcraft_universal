@@ -11,5 +11,6 @@ class DataGeneration : DataGeneratorEntrypoint {
         fabricDataGenerator?.addProvider(::LootTableGenerator);
         fabricDataGenerator?.addProvider(::ModelProvider)
         fabricDataGenerator?.addProvider(::MySoundDefinitionsProvider)
+        fabricDataGenerator?.addProvider(::LangProvider)
     }
 }
