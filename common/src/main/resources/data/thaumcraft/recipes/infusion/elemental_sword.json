@@ -1,0 +1,11 @@
+{
+  "type": "thaumcraft:infusing",
+  "ingredients": [
+    {
+      "item": "byg:pendorite_sword"
+    }
+  ],
+  "output": {
+    "item": "thaumcraft:elemental_sword"
+  }
+}

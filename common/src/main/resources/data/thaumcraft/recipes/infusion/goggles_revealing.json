@@ -1,0 +1,11 @@
+{
+  "type": "thaumcraft:infusing",
+  "ingredients": [
+    {
+      "item": "byg:ametrine_helmet"
+    }
+  ],
+  "output": {
+    "item": "thaumcraft:goggles_revealing"
+  }
+}

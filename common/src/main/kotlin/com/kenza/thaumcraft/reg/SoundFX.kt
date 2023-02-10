@@ -1,8 +1,14 @@
 package com.kenza.thaumcraft.reg
 
+import io.kenza.support.utils.KMath
 import io.kenza.support.utils.getRegSoundEvent
 import io.kenza.support.utils.identifier
+import io.kenza.support.utils.pickRandomly
+import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvent
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import kotlin.math.absoluteValue
 
 enum class SoundFX {
     cameraticks, bubble1, bubble2, bubble3, bubble4,
@@ -16,4 +22,20 @@ enum class SoundFX {
         get() = identifier(name).run {
             getRegSoundEvent()
         }
+
+    companion object {
+        val wands = listOf(SoundFX.wand1, SoundFX.wand2, SoundFX.wand3)
+
+        fun playWandSound(world: World, pos: BlockPos) {
+
+            val sound = wands.pickRandomly().soundEvent
+
+            world
+                .playSound(
+                    null, pos,
+                    sound, SoundCategory.AMBIENT, 1f, 1f
+                )
+
+        }
+    }
 }

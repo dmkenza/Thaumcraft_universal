@@ -5,6 +5,8 @@ import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.client.render.ArcanePedestalBlockEntityRenderer
 import com.kenza.thaumcraft.item.*
+import com.kenza.thaumcraft.recipe.InfusingRecipeSerializer
+import com.kenza.thaumcraft.recipe.InfusionRecipe
 import com.kenza.thaumcraft.reg.*
 import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_ARCANE_AM
 import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_DEFAULT_AM
@@ -18,6 +20,8 @@ import io.kenza.support.utils.reg.Ref.ITEMS
 import io.kenza.support.utils.reg.Ref.MOD_ID
 import io.kenza.support.utils.reg.Ref.MOD_TAB
 import io.kenza.support.utils.reg.Ref.POINT_OF_INTEREST_TYPES
+import io.kenza.support.utils.reg.Ref.RECIPE_SERIALIZERS
+import io.kenza.support.utils.reg.Ref.RECIPE_TYPES
 import io.kenza.support.utils.reg.Ref.SCREEN_HANDLERS
 import io.kenza.support.utils.reg.Ref.SOUNDS_EVENTS
 import io.kenza.support.utils.reg.Ref.VILLAGER_PROFESSIONS
@@ -30,13 +34,19 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
+import net.minecraft.recipe.RecipeSerializer
+import net.minecraft.recipe.RecipeType
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import potionstudios.byg.common.item.BYGTier
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
 import java.util.function.Supplier
+
+///kill @e[type=!player]
+///gamerule doMobSpawning false
+///gamerule doDaylightCycle false
+///data get entity @s SelectedItem
 
 object ThaumcraftCommon {
 
@@ -53,6 +63,9 @@ object ThaumcraftCommon {
         SOUNDS_EVENTS =
             DeferredRegister.create<SoundEvent>(MOD_ID, Registry.SOUND_EVENT_KEY)
         SCREEN_HANDLERS = DeferredRegister.create<ScreenHandlerType<*>>(MOD_ID, Registry.MENU_KEY)
+
+        RECIPE_SERIALIZERS = DeferredRegister.create(MOD_ID, Registry.RECIPE_SERIALIZER_KEY)
+        RECIPE_TYPES = DeferredRegister.create(MOD_ID, Registry.RECIPE_TYPE_KEY)
     }
 
 
@@ -240,8 +253,14 @@ object ThaumcraftCommon {
             }
         }
 
-
-
+        identifier(InfusionRecipe.INFUSUING_ID).apply {
+            recipeType{
+                InfusionRecipe.Type.INSTANCE
+            }
+            recipeSerializer{
+                InfusingRecipeSerializer.INSTANCE
+            }
+        }
         finishInit()
     }
 
@@ -255,6 +274,8 @@ object ThaumcraftCommon {
 
         POINT_OF_INTEREST_TYPES.register()
         VILLAGER_PROFESSIONS.register()
+        RECIPE_SERIALIZERS.register()
+        RECIPE_TYPES.register()
     }
 
 }

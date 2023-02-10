@@ -1,0 +1,11 @@
+{
+  "type": "thaumcraft:infusing",
+  "ingredients": [
+    {
+      "item": "byg:ametrine_boots"
+    }
+  ],
+  "output": {
+    "item": "thaumcraft:traveller_boots"
+  }
+}

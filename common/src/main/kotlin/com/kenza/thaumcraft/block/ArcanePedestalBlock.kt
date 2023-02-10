@@ -1,7 +1,7 @@
 package com.kenza.thaumcraft.block
 
 import com.google.common.collect.ImmutableMap
-import com.kenza.thaumcraft.process.MagicTransformProcess.arcaneItemTransform
+import com.kenza.thaumcraft.process.MagicTransformProcess.tryMakeInfusion
 import com.kenza.thaumcraft.process.MagicTransformProcess.isTransformer
 import io.kenza.support.utils.getRegBlockEntityType
 import net.minecraft.block.*
@@ -84,7 +84,7 @@ class ArcanePedestalBlock(
         val itemStackInSlot = blockEntity.items.getOrNull(slot)
         if(isTransformer(player.mainHandStack)){
             (player as? ServerPlayerEntity)?.let {
-                arcaneItemTransform(player, blockEntity, state, world, pos)
+                tryMakeInfusion(player, blockEntity, state, world, pos)
             }
             return  ActionResult.SUCCESS
         }

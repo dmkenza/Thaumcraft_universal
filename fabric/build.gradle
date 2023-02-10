@@ -82,6 +82,7 @@ repositories {
             includeGroup("net.oskarstrom")
         }
     }
+    maven { url "https://maven.shedaniel.me" }
 
 }
 
@@ -117,6 +118,7 @@ dependencies {
 
 //    modImplementation("io.github.cottonmc:LibGui:6.0.1+1.19")
 //    include("io.github.cottonmc:LibGui:6.0.1+1.19")
+    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.fabric_rei_version}")
     modImplementation("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
     include("io.github.cottonmc:LibGui:${rootProject.fabric_libGui}")
 

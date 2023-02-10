@@ -1,0 +1,11 @@
+{
+  "type": "thaumcraft:infusing",
+  "ingredients": [
+    {
+      "item": "byg:pendorite_pickaxe"
+    }
+  ],
+  "output": {
+    "item": "thaumcraft:elemental_pick"
+  }
+}
