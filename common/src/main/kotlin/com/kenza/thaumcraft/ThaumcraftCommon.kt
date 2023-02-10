@@ -6,6 +6,7 @@ import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.client.render.ArcanePedestalBlockEntityRenderer
 import com.kenza.thaumcraft.item.*
 import com.kenza.thaumcraft.reg.*
+import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_ARCANE_AM
 import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_DEFAULT_AM
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
@@ -34,6 +35,7 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import potionstudios.byg.common.item.BYGTier
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
 import java.util.function.Supplier
 
 object ThaumcraftCommon {
@@ -69,27 +71,26 @@ object ThaumcraftCommon {
             Blocks.JUKEBOX.asItem().defaultStack
         }
 
-
         SoundFX.values().map {
             identifier(it.name).apply {
                 soundEvent()
             }
         }
 
-//        identifier("traveller_boots").apply {
-//            TRAVELLER_BOOTS = item {
-//                ArmorItem(
-//                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.FEET, Item.Settings()
-//                        .group(MOD_TAB)
-//                )
-//            }
-//            itemDataGen()
-//        }
+        identifier("traveller_boots").apply {
+            TRAVELLER_BOOTS = item {
+                ArmorItem(
+                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.FEET, Item.Settings()
+                        .group(MOD_TAB)
+                )
+            }
+            itemDataGen()
+        }
 
         identifier("goggles_revealing").apply {
             GOGLES_REVEALING = item {
                 ThaumcraftArmorItem(
-                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.HEAD, Item.Settings()
+                    THAUMCRAFT_ARCANE_AM, EquipmentSlot.HEAD, Item.Settings()
                         .group(MOD_TAB)
                 )
             }

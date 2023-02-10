@@ -65,7 +65,8 @@ class TArmorMaterials private constructor(
         private val MAX_DAMAGE_ARRAY: IntArray
 
 //        val THAUMCRAFT_RESEARCHER_AM = createArmorMaterial ("thaumcraft_researcher")
-        val THAUMCRAFT_DEFAULT_AM = createArmorMaterial ("arcane")
+        val THAUMCRAFT_ARCANE_AM = createArmorMaterial ("arcane")
+        val THAUMCRAFT_DEFAULT_AM = createArmorMaterial ("thaumcraft")
 
         fun createArmorMaterial(name: String) = BYGArmorMaterial(
             name,

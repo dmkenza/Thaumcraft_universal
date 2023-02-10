@@ -44,7 +44,7 @@ dependencies {
 //    modCompileOnly(project(":kenzaMcApi"))
 //    modApi project(path: ':kenzaMcApi')
 //    include(project(":kenzaMcApi"))
-    common project(path: ':kenzaMcApi')
+    common(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
 //    shadowCommon project(path: ':kenzaMcApi')
 
 //    modImplementation(project(path: ":kenzaMcApi", configuration: "namedElements")) {
