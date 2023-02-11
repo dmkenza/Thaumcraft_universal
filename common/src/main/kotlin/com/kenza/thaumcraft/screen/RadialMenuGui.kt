@@ -6,13 +6,11 @@ import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.*
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.icon.ItemIcon
-import io.kenza.support.utils.chatMsg
-import io.kenza.support.utils.extensions.weak
+import io.kenza.support.utils.debugMsg
 import io.kenza.support.utils.mc
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import java.lang.ref.WeakReference
 
 
 class RadialMenuGui(
@@ -66,7 +64,7 @@ class RadialMenuGui(
     }
 
     override fun onElementSelected(w: WRadialButton) {
-        chatMsg(w.toString())
+        debugMsg(w.toString())
         mc.currentScreen?.close()
     }
 

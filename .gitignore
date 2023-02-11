@@ -22,3 +22,6 @@ classes/
 /forge/src/generated/resources/.cache/*
 /common/src/main/generated/
 /.architectury-transformer/
+/fabric/libs_dev/*
+/fabric/libs/*
+/forge/libs_dev/*

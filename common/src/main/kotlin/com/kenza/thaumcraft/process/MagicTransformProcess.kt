@@ -2,17 +2,13 @@ package com.kenza.thaumcraft.process
 
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.recipe.InfusionRecipe
-import com.kenza.thaumcraft.reg.ELEMENTAL_PICK
 import com.kenza.thaumcraft.reg.SALIS_MUNDUS_ITEM
 import com.kenza.thaumcraft.reg.SoundFX
-import io.kenza.support.utils.chatMsg
 import io.kenza.support.utils.identifier
 import net.minecraft.block.BlockState
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*

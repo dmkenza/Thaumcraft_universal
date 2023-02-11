@@ -4,6 +4,8 @@
   "package": "com.kenza.thaumcraft.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "EntityMixin",
+    "LivingEntityMixin",
     "ServerPlayerInteractionManagerMixin"
   ],
   "client": [

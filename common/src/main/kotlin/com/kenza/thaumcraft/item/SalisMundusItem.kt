@@ -1,6 +1,5 @@
 package com.kenza.thaumcraft.item
 
-import io.kenza.support.utils.chatMsg
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnReason

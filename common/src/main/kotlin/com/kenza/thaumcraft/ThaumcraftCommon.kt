@@ -92,7 +92,7 @@ object ThaumcraftCommon {
 
         identifier("traveller_boots").apply {
             TRAVELLER_BOOTS = item {
-                ArmorItem(
+                BootsTravellerItem(
                     THAUMCRAFT_DEFAULT_AM, EquipmentSlot.FEET, Item.Settings()
                         .group(MOD_TAB)
                 )
