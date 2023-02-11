@@ -5,12 +5,14 @@
   "block.thaumcraft.arcane_stone_stairs": "Arcane Stone Stairs",
   "item.thaumcraft.elemental_axe": "Elemental Axe",
   "item.thaumcraft.elemental_hoe": "Elemental Hoe",
-  "item.thaumcraft.elemental_pick": "Elemental Pick",
+  "item.thaumcraft.elemental_pick": "Pickaxe of the Echo ",
   "item.thaumcraft.elemental_shovel": "Elemental Shovel",
   "item.thaumcraft.elemental_sword": "Elemental Sword",
   "item.thaumcraft.focus_pouch": "Focus Pouch",
   "item.thaumcraft.goggles_revealing": "Goggles Revealing",
   "item.thaumcraft.salis_mundus": "Salis Mundus",
   "item.thaumcraft.shard": "Shard",
-  "item.thaumcraft.traveller_boots": "Traveller Boots"
+  "item.thaumcraft.traveller_boots": "Traveller Boots",
+  "item.thaumcraft.thaumonomicon": "Thaumonomicon",
+  "itemGroup.thaumcraft.thaumcraft_tab": "Thaumcraft"
 }

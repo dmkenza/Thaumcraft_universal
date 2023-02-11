@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "byg:firecracker_flower_bush"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "byg:ametrine_gems"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "tag": "music_discs"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "item": "thaumcraft:salis_mundus",
+    "count": 1
+  }
+}
+
+

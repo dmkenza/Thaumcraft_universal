@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "thaumcraft",
+  "pattern": [
+    "xyx",
+    "yzy",
+    "xyx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:stone"
+    },
+    "y": {
+      "item": "minecraft:deepslate"
+    },
+    "z": {
+      "item": "byg:ametrine_gems"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:arcane_stone"
+  }
+}

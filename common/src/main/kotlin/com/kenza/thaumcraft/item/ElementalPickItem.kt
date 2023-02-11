@@ -2,16 +2,17 @@ package com.kenza.thaumcraft.item
 
 import com.kenza.thaumcraft.MixinFields
 import com.kenza.thaumcraft.reg.SoundFX
+import com.kenza.thaumcraft.screen.interfaces.RadialPanelHandleable
 import io.kenza.support.annotations.NbtKey
 import io.kenza.support.utils.*
+import io.kenza.support.utils.kotlin.collectAsSet
 import net.minecraft.block.BlockState
 import net.minecraft.block.OreBlock
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.*
+import net.minecraft.nbt.StringNbtReader
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
@@ -23,10 +24,7 @@ import kotlin.math.absoluteValue
 class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed: Float, settsings: Settings?) :
     PickaxeItem(
         material, attackDamage, attackSpeed, settsings
-    ) {
-
-//    val testId = identifier("minecraft:iron_ore")
-
+    ), RadialPanelHandleable {
 
     override fun postMine(
         stack: ItemStack?,
@@ -35,6 +33,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
         pos: BlockPos?,
         miner: LivingEntity?,
     ): Boolean {
+        if (world?.isClient == true)  super.postMine(stack, world, state, pos, miner)
 
         (miner as? PlayerEntity)?.let {
             val itemContext = getItemContext(world, it, it.activeHand, pos)
@@ -45,14 +44,15 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
 
 
     override fun useOnBlock(context: ItemUsageContext?): ActionResult {
+        if (context?.world?.isClient == true) return ActionResult.SUCCESS
+
         with(context) {
             val itemStack = context?.player?.getStackInHand(context.hand) ?: return@with
+            val player = context.player ?: return@with
 
-            if (!Screen.hasShiftDown()) {
+            if (!player.isInSneakingPose) {
                 scanOreByPick(context)
-                if(context.player?.isCreative != true){
-                    itemStack.incremenDamage()
-                }
+                itemStack.incremenDamage()
                 return@with
             }
 
@@ -61,23 +61,53 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
             }
 
             val selectedOreRawId = if (blockState?.block is OreBlock) {
+                SoundFX.cameraticks.playSound(context.world, context.blockPos, player)
                 blockState.block.id().toString()
-            }else{
+            } else {
+                SoundFX.playCameraClack(context.world, context.blockPos, player)
                 null
             }
+
 
             itemStack.changeData<ElementalPickItemData> {
                 it.copy(
                     selectedOreRawId = selectedOreRawId
                 )
             }
-            context.player?.setStackInHand(context.hand, itemStack.copy())
+
+
+
+            context.player?.setStackInHand(context.hand, itemStack)
         }
 
 
-        return ActionResult.CONSUME// super.useOnBlock(context)
+        return ActionResult.SUCCESS// super.useOnBlock(context)
     }
 
+    override fun onRadialPanelItemSelected(selectedItemId: Identifier, player: PlayerEntity) {
+        player.mainHandStack.changeData<ElementalPickItemData> {
+            it.copy(
+                selectedOreRawId = if(selectedItemId.isEmpty()){
+                    null
+                }else{
+                    selectedItemId.toString()
+                }
+            )
+        }
+        SoundFX.cameraticks.playSound(player.world, player.blockPos, player)
+    }
+
+    fun getSelectedOreStack(itemStack: ItemStack): ItemStack? {
+        return itemStack.readData<ElementalPickItemData>().selectedOreId?.run {
+            parseOre(this)
+        }
+    }
+
+    private fun parseOre(selectedOreId: Identifier): ItemStack {
+        val json =
+            "{Count:1b,id:\"${selectedOreId.toString()}\"}"
+        return ItemStack.fromNbt(StringNbtReader.parse(json))
+    }
 
     private fun getItemContext(world: World?, user: PlayerEntity, hand: Hand?, pos: BlockPos?): ItemUsageContext {
         return ItemUsageContext(user, hand, MixinFields.tryBreakBlock_ServerPlayerInteractionManager_raycasted_block)
@@ -85,17 +115,16 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
 
     private fun scanOreByPick(
         context: ItemUsageContext?,
-    ) = with(context) {
+    ) {
 
-        val itemStack = context?.player?.getStackInHand(context.hand) ?: return@with
-        val player = context.player ?: return@with
-        val world = this@with?.world ?: return@with
-        val selectedOreId = itemStack.readData<ElementalPickItemData>().selectedOreId ?: return@with
-
+        val itemStack = context?.player?.getStackInHand(context.hand) ?: return
+        val player = context.player ?: return
+        val world = context.world ?: return
+        val selectedOreId = itemStack.readData<ElementalPickItemData>().selectedOreId ?: return
 //        val side = context.playerFacing?.opposite ?: return@with
-        val side = this@with.side ?: return@with
+        val side = context.side ?: return
 
-        val blockPos = kotlin.runCatching { context.blockPos?.toVec3d() }.getOrNull() ?: return@with
+        val blockPos = kotlin.runCatching { context.blockPos?.toVec3d() }.getOrNull() ?: return
 
 //        val oreRange = 5 + KMath.getBetween(0, 4)
         val oreRange = 9 + KMath.getBetween(0, 4)
@@ -115,7 +144,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
 
             net.minecraft.util.math.Box.of(
                 blockPos
-                    .add(offsetX, offsetY , offsetZ),
+                    .add(offsetX, offsetY, offsetZ),
                 offsetX2 * 2 * t, (offsetY3), offsetZ2 * 2 * t
             )
         }.map {
@@ -169,7 +198,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
                 newScore = if (it.actionScore >= 1) {
                     isEmitAction = true
                     0f
-                } else if (blocksScore <MIN_SCORE_ACTIVATION) {
+                } else if (blocksScore < MIN_SCORE_ACTIVATION) {
                     it.actionScore - KMath.getBetween(0.1f, 0.15f)
                 } else {
                     it.actionScore + KMath.getBetween(0.34f, 0.5f)
@@ -188,28 +217,32 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
                     }
 
                     if (blocksScore <= MIN_SCORE_ACTIVATION) {
-                        return@with
+                        return
                     }
 
 //                    context.player?.setStackInHand(context.hand, itemStack)
 
                     val soundVolume = blocksScore.cutByRange(0.3, 1.0).toFloat() - KMath.getBetween(0.0f, 0.05f)
                     if (isEmitAction) {
-                        world.playSound(
-                            null,
-                            player.blockPos,
-                            SoundFX.neutralization.soundEvent,
-                            SoundCategory.AMBIENT,
-                            soundVolume,
+
+                        SoundFX.neutralization.playSound(
+                            world, player.blockPos, player, soundVolume,
                             1f - KMath.getBetween(0f, 0.05f)
                         )
-
+//                        world.playSound(
+//                            player,
+//                            player.blockPos,
+//                            SoundFX.neutralization.soundEvent,
+//                            SoundCategory.AMBIENT,
+//
+//                        )
                     }
                 }
 
             }
         }
     }
+
 }
 
 

@@ -10,6 +10,7 @@ import com.kenza.thaumcraft.recipe.InfusionRecipe
 import com.kenza.thaumcraft.reg.*
 import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_ARCANE_AM
 import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_DEFAULT_AM
+import com.kenza.thaumcraft.screen.net.ScreenNetworking
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.Registries
 import io.kenza.support.utils.*
@@ -79,9 +80,8 @@ object ThaumcraftCommon {
 
     fun onInitialize() {
 
-
         MOD_TAB = commonPlatformHelper.registerCreativeModeTab(identifier("thaumcraft_tab")) {
-            Blocks.JUKEBOX.asItem().defaultStack
+            GOGLES_REVEALING.get().defaultStack
         }
 
         SoundFX.values().map {
@@ -197,6 +197,7 @@ object ThaumcraftCommon {
                 STONE_SETTINGS
             }
             blockAndItem(block)
+            stoneMaterialDataGen()
         }
 
         identifier("arcane_stone_slab").apply {
@@ -261,6 +262,9 @@ object ThaumcraftCommon {
                 InfusingRecipeSerializer.INSTANCE
             }
         }
+
+        ScreenNetworking.initServer()
+
         finishInit()
     }
 

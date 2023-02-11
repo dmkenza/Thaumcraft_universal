@@ -1,9 +1,11 @@
-package com.kenza.thaumcraft
+package com.kenza.thaumcraft.datagen
 
 import io.kenza.support.utils.getRegBlock
 import io.kenza.support.utils.getRegItem
 import io.kenza.support.utils.identifier
+import io.kenza.support.utils.reg.Ref
 import io.kenza.support.utils.reg.Ref.DATAGEN_SIMPLE_ITEMS
+import io.kenza.support.utils.reg.Ref.STONES_MATERIALS
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.block.Block
@@ -17,9 +19,7 @@ import net.minecraft.item.Item
 
 class ModelProvider(dataGenerator: FabricDataGenerator?) : FabricModelProvider(dataGenerator) {
 
-    val STONES_MATERIAL = listOf(
-        "arcane_stone"
-    )
+
 
     override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator)  = with(blockStateModelGenerator){
 //        blockStateModelGenerator.registerCubeAllModelTexturePool(ModBlocks.JUMPY_BLOCK)
@@ -27,7 +27,7 @@ class ModelProvider(dataGenerator: FabricDataGenerator?) : FabricModelProvider(d
         //slab
 //        createSlabs(blockStateModelGenerator)
 
-        STONES_MATERIAL.map {
+        STONES_MATERIALS.map {
             it to it + "_stairs"
         }.map {  (block, stairs) ->
             block.getRegBlock<Block>()!!.get() to stairs.getRegBlock<StairsBlock>()!!.get()
@@ -54,7 +54,7 @@ class ModelProvider(dataGenerator: FabricDataGenerator?) : FabricModelProvider(d
     }
 
     fun BlockStateModelGenerator.createSlabs(){
-        STONES_MATERIAL.map {
+        STONES_MATERIALS.map {
             it to it + "_slab"
         }.map {  (block, slab) ->
             block.getRegBlock<Block>()!!.get() to slab.getRegBlock<SlabBlock>()!!.get()

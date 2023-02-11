@@ -62,7 +62,7 @@ object MagicTransformProcess {
             }
 
 
-            SoundFX.playWandSound(world, pos)
+            SoundFX.playWandSound(world, pos, player)
 
 
             entity.markDirty()

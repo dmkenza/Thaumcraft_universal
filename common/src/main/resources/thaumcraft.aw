@@ -5,3 +5,4 @@ accessible method net/minecraft/village/VillagerProfession 	register	(Ljava/lang
 accessible field net/minecraft/entity/Entity movementMultiplier Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/entity/LivingEntity jump ()V
 accessible method net/minecraft/entity/player/PlayerEntity getVelocityMultiplier ()F
+accessible field net/minecraft/text/TranslatableTextContent key Ljava/lang/String;

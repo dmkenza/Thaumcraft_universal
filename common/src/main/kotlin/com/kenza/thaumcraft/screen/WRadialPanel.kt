@@ -4,12 +4,15 @@ import com.kenza.thaumcraft.WRadialButton
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.kenza.support.utils.mc
+import net.minecraft.client.util.math.MatrixStack
 import kotlin.math.sqrt
 
 class WRadialPlainPanel(
     val panelWidth: Int,
-    val radialPanelListener: RadialPanelListener
+    val radialPanelListener: RadialPanelListener,
 ) : WPlainPanel(), RadialDelegate {
+
+    var frames: Int = 0
 
 
     private var radialBack: WRadialBack? = null
@@ -49,9 +52,9 @@ class WRadialPlainPanel(
         return false
     }
 
-    fun prepareElements(){
+    fun prepareElements() {
 
-        if(radialElementsWasAdded){
+        if (radialElementsWasAdded) {
             return
         }
         list.map { w ->
@@ -75,13 +78,21 @@ class WRadialPlainPanel(
         radialElementsWasAdded = true
     }
 
-    override fun tick() {
+
+    override fun paint(matrices: MatrixStack?, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        super.paint(matrices, x, y, mouseX, mouseY)
+
+//        if (frames % 2 != 0) {
+//            frames++
+//            return
+//        }
+//        frames++
 
         prepareElements()
 
-        if(radialAnimActive){
+        if (radialAnimActive) {
             radialAnim += 0.07f
-        }else{
+        } else {
             radialAnim -= 0.07f
         }
         if (radialAnim > 1f) {
@@ -92,7 +103,7 @@ class WRadialPlainPanel(
             radialAnim = 0f
         }
 
-        if(radialAnim == 0f){
+        if (radialAnim == 0f) {
             mc.currentScreen?.close()
         }
 
@@ -109,10 +120,10 @@ class WRadialPlainPanel(
 
 
         selectAnim.replaceAll { w, v ->
-            if(selectedWidget == w && selAnim != 0f){
+            if (selectedWidget == w && selAnim != 0f) {
                 return@replaceAll selAnim
             }
-            if(v <= 0){
+            if (v <= 0) {
                 return@replaceAll 0f
             }
             return@replaceAll v - 0.15f
@@ -121,7 +132,6 @@ class WRadialPlainPanel(
 
         setRadialLocations()
 
-        super.tick()
     }
 
     fun setRadialLocations() {
@@ -141,16 +151,16 @@ class WRadialPlainPanel(
         val y0 = panelWidth / 2
 
         val r: Float = elementsWidth
-        val angle = rad  - (90 * radialAnim)
+        val angle = rad - (90 * radialAnim)
 
         val elemAnim = selectAnim.get(this) ?: 0f
-        val x = (x0 + r * Math.cos(Math.toRadians(angle)) * 0.8 * (radialAnim )) - width / 2
-        val y = (y0 + r * Math.sin(Math.toRadians(angle)) * 0.8 * (radialAnim )) - height / 2
+        val x = (x0 + r * Math.cos(Math.toRadians(angle)) * 0.8 * (radialAnim)) - width / 2
+        val y = (y0 + r * Math.sin(Math.toRadians(angle)) * 0.8 * (radialAnim)) - height / 2
 
-        val sizeOrigBtn = ( 20 * ( radialAnim  )).toInt()
+        val sizeOrigBtn = (16 * (radialAnim)).toInt()
         var sizeAnimBtn = sizeOrigBtn + (sizeOrigBtn * 0.3 * elemAnim).toInt()
 
-        if(sizeAnimBtn < sizeOrigBtn){
+        if (sizeAnimBtn < sizeOrigBtn) {
             sizeAnimBtn = sizeOrigBtn
         }
         setSize(sizeOrigBtn, sizeOrigBtn)
@@ -167,7 +177,7 @@ class WRadialPlainPanel(
 
     override fun onRadialAnimRequested(): Float = radialAnim
 
-    fun onClose(){
+    fun onClose() {
         selectedWidget?.let {
             radialPanelListener.onElementSelected(it)
         }

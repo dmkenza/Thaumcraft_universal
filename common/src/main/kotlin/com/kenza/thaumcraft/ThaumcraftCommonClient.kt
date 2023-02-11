@@ -2,15 +2,20 @@ package com.kenza.thaumcraft
 
 import com.kenza.thaumcraft.MixinFields.unbindAll_KeyBinding_enabled
 import com.kenza.thaumcraft.client.render.ThaumcraftArmorRenderer
+import com.kenza.thaumcraft.item.ElementalPickItem
 import com.kenza.thaumcraft.reg.GOGLES_REVEALING
-import com.kenza.thaumcraft.reg.TRAVELLER_BOOTS
 import com.kenza.thaumcraft.screen.ClientScreen
+import com.kenza.thaumcraft.screen.InGameHud
 import com.kenza.thaumcraft.screen.RadialMenuGui
+import com.kenza.thaumcraft.screen.net.ScreenNetworking
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
+import io.github.cottonmc.cotton.gui.client.CottonHud
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.kenza.support.utils.base.*
 import io.kenza.support.utils.getRegBlockEntityType
+import io.kenza.support.utils.identifier
+import io.kenza.support.utils.kotlin.safeCast
 import io.kenza.support.utils.mc
 import io.kenza.support.utils.reg.Ref
 import io.kenza.support.utils.reg.Ref.KEY_BINDINGS_MAP
@@ -29,9 +34,11 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 ////        ScrollingTestGui()
 ////    }a
 
+    var inGameHud: InGameHud? =null
 
     override fun onInitialize() {
         super.onInitialize()
+
 
         Ref.CLIENT_ENTITY_REGISTERER_MAP.map { (id, render) ->
 
@@ -43,11 +50,19 @@ object ThaumcraftCommonClient : BaseModInitializer() {
         }
 
 
-        val mapping = KeyBinding(
-            "key.thaumcraft.test",
-            GLFW.GLFW_KEY_R,
+
+        val mappingMain = KeyBinding(
+            "key.thaumcraft.main",
+            GLFW.GLFW_KEY_G,
             "category.thaumcraft"
         )
+
+//        val mappingTest = KeyBinding(
+//            "key.thaumcraft.test",
+//            GLFW.GLFW_KEY_V,
+//            "category.thaumcraft"
+//        )
+
 //        val radialMenuScreen = RadialMenuScreen()
 
 //        val screen = RadialMenuScreen(
@@ -55,27 +70,50 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 ////            Text.literal("RadialMenuScreen")
 //        )
 
+        inGameHud = InGameHud()
+        CottonHud.add( inGameHud, 20, -28, 24, 24)
+
+
+//        inGameHud = InGameHud()
+//        CottonHud.add( inGameHud, 20, -54, 40, 40)
+
         GeoArmorRenderer.registerArmorRenderer<ClientPlayerEntity>(
             ThaumcraftArmorRenderer(),
             GOGLES_REVEALING.get()
         )
 
-        RadialMenuGui(mapping)
+        RadialMenuGui(mappingMain)
 
-        keyBinding(mapping) {
+        keyBinding(mappingMain) {
             when (it) {
                 is KeyAction.ActionDown -> {
+
+//                    CottonHud.remove(inGameHud)
+//                    inGameHud = InGameHud()
+//                    CottonHud.add( inGameHud, 20, -28, 24, 24)
+
 
                     if(mc.currentScreen is ClientScreen){
                         return@keyBinding
                     }
 
-                    radialMenuScreen = RadialMenuGui(mapping)
-                    unbindAll_KeyBinding_enabled = false
-                    openScreen (
-                        radialMenuScreen!!
-                    )
-                    unbindAll_KeyBinding_enabled = true
+                    mc.player?.mainHandStack?.item.safeCast<ElementalPickItem>().apply {
+                        this ?: return@apply
+
+                        if(mc.player?.isInSneakingPose == true){
+                            ScreenNetworking.send(identifier(""))
+                            return@keyBinding
+                        }
+
+                        radialMenuScreen = RadialMenuGui(mappingMain)
+                        unbindAll_KeyBinding_enabled = false
+                        openScreen (
+                            radialMenuScreen!!
+                        )
+                        unbindAll_KeyBinding_enabled = true
+                    }
+
+
                 }
                 is KeyAction.ActionHold -> {
                 }
@@ -97,6 +135,9 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 
 
 //        CottonHud.add( WLabel(Text.literal("Test label1")), 10, -30, 10, 10);
+
+        ScreenNetworking.initClient()
+
     }
 
 

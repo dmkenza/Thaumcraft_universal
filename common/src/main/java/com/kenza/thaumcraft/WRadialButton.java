@@ -3,6 +3,7 @@ package com.kenza.thaumcraft;
 
 import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
+import io.github.cottonmc.cotton.gui.widget.icon.ItemIcon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.screen.narration.NarrationPart;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -40,44 +42,14 @@ public class WRadialButton extends WWidget {
 
     @Nullable private Runnable onClick;
     @Nullable private Icon icon = null;
+    public ItemStack itemStack;
 
-    /**
-     * Constructs a button with no label and no icon.
-     */
-    public WRadialButton() {
 
+    public WRadialButton(ItemStack itemStack) {
+        this.itemStack = itemStack;
+        this.icon = new ItemIcon(itemStack);
     }
 
-    /**
-     * Constructs a button with an icon.
-     *
-     * @param icon the icon
-     * @since 2.2.0
-     */
-    public WRadialButton(@Nullable Icon icon) {
-        this.icon = icon;
-    }
-
-    /**
-     * Constructs a button with a label.
-     *
-     * @param label the label
-     */
-    public WRadialButton(@Nullable Text label) {
-        this.label = label;
-    }
-
-    /**
-     * Constructs a button with an icon and a label.
-     *
-     * @param icon  the icon
-     * @param label the label
-     * @since 2.2.0
-     */
-    public WRadialButton(@Nullable Icon icon, @Nullable Text label) {
-        this.icon = icon;
-        this.label = label;
-    }
 
     @Override
     public boolean canResize() {
