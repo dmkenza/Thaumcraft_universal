@@ -1,10 +1,7 @@
 package com.kenza.thaumcraft.client
 
-import com.kenza.thaumcraft.Debug
 import com.kenza.thaumcraft.ThaumcraftArmorItem
-import com.minelittlepony.MineLittlePonyServer
-import com.minelittlepony.client.MineLittlePony
-import com.minelittlepony.settings.PonyLevel
+import io.kenza.support.utils.debugMsg
 import io.kenza.support.utils.reg.Ref.MOD_ID
 import net.minecraft.util.Identifier
 import software.bernie.geckolib3.model.AnimatedGeoModel
@@ -14,12 +11,7 @@ class ThaumcraftArmorModel : AnimatedGeoModel<ThaumcraftArmorItem?>() {
 
     override fun getModelResource(`object`: ThaumcraftArmorItem?): Identifier {
 //        Debug.test()
-        return when(MineLittlePony.getInstance().config.ponyLevel.get()){
-            PonyLevel.PONIES -> Identifier(MOD_ID, "geo/mlp_thaumcraft_armor.geo.json")
-            PonyLevel.HUMANS -> Identifier(MOD_ID, "geo/thaumcraft_armor.geo.json")
-            PonyLevel.BOTH -> Identifier(MOD_ID, "geo/thaumcraft_armor.geo.json")
-        }
-
+        return Identifier(MOD_ID, "geo/thaumcraft_armor.geo.json")
 //        return Identifier(MOD_ID, "geo/thaumcraft_armor.geo.json")
     }
 

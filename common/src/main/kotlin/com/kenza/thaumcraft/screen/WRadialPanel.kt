@@ -80,7 +80,14 @@ class WRadialPlainPanel(
 
 
     override fun paint(matrices: MatrixStack?, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+
+
         super.paint(matrices, x, y, mouseX, mouseY)
+
+        if(list.isEmpty()){
+            mc.currentScreen?.close()
+            return
+        }
 
 //        if (frames % 2 != 0) {
 //            frames++

@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
+import software.bernie.example.item.GeckoArmorItem;
 import software.bernie.example.registry.ItemRegistry;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -23,7 +24,7 @@ import java.util.List;
 import static com.kenza.thaumcraft.reg.DictionaryKt.GOGLES_REVEALING;
 import static com.kenza.thaumcraft.reg.DictionaryKt.TRAVELLER_BOOTS;
 
-public class ThaumcraftArmorItem extends ArmorItem implements IAnimatable {
+public class ThaumcraftArmorItem extends GeckoArmorItem implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public ThaumcraftArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {

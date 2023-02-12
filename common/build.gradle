@@ -44,7 +44,7 @@ dependencies {
 //    modCompileOnly(project(":kenzaMcApi"))
 //    modApi project(path: ':kenzaMcApi')
 //    include(project(":kenzaMcApi"))
-    common(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
+    common(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
 //    shadowCommon project(path: ':kenzaMcApi')
 
 //    modImplementation(project(path: ":kenzaMcApi", configuration: "namedElements")) {
@@ -62,7 +62,9 @@ dependencies {
 //    include(project(":kenzaMcApi"))
 
     modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version}"
+//    modImplementation "software.bernie.geckolib:geckolib-forge-1.19:${project.geckolib_version_forge}"
+//    compileOnly "software.bernie.geckolib:geckolib-forge-1.19:${project.geckolib_version_forge}"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version_fabric}"
 //    include "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies

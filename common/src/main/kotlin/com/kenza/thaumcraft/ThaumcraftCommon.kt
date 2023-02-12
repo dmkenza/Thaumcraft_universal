@@ -32,11 +32,8 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.item.ArmorItem
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
-import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.RecipeType
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
@@ -103,7 +100,7 @@ object ThaumcraftCommon {
         identifier("goggles_revealing").apply {
             GOGLES_REVEALING = item {
                 ThaumcraftArmorItem(
-                    THAUMCRAFT_ARCANE_AM, EquipmentSlot.HEAD, Item.Settings()
+                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.HEAD, Item.Settings()
                         .group(MOD_TAB)
                 )
             }
@@ -226,6 +223,7 @@ object ThaumcraftCommon {
 //                    STONE_SETTINGS
 //                )
 //            }
+
             val block = {
                 ArcanePedestalBlock(
                     this,
@@ -245,9 +243,10 @@ object ThaumcraftCommon {
                 ).build(null)
             }
 
-            blockAndItem(block)
+            ARCANE_PEDESTAL_BLOCK = blockAndItem(block)
 
-            clientRun {
+
+            clientOnly {
                 blockEntityTypeRender {
                     ArcanePedestalBlockEntityRenderer()
                 }

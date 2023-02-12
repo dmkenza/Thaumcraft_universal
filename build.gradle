@@ -46,12 +46,7 @@ subprojects {
 //        api "blue.endless:jankson:1.2.1"
 //        modImplementation("blue.endless:jankson:1.2.1")
 //        shade 'blue.endless:jankson:1.2.1'
-        if (path != ":kenzaMcApi") {
-//            implementation(project(path: ":kenzaMcApi", configuration: "namedElements")) {
-//                transitive false
-//            }
-//            include(project(path: ":kenzaMcApi"))
-        }
+
 //        include 'org.joml:joml:1.10.5'
     }
 

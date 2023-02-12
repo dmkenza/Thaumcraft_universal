@@ -8,6 +8,7 @@ import com.kenza.thaumcraft.screen.ClientScreen
 import com.kenza.thaumcraft.screen.InGameHud
 import com.kenza.thaumcraft.screen.RadialMenuGui
 import com.kenza.thaumcraft.screen.net.ScreenNetworking
+import dev.architectury.platform.Platform
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
 import io.github.cottonmc.cotton.gui.client.CottonHud
@@ -19,6 +20,8 @@ import io.kenza.support.utils.kotlin.safeCast
 import io.kenza.support.utils.mc
 import io.kenza.support.utils.reg.Ref
 import io.kenza.support.utils.reg.Ref.KEY_BINDINGS_MAP
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.option.KeyBinding
@@ -36,8 +39,11 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 
     var inGameHud: InGameHud? =null
 
+
+
     override fun onInitialize() {
         super.onInitialize()
+
 
 
         Ref.CLIENT_ENTITY_REGISTERER_MAP.map { (id, render) ->
@@ -48,6 +54,16 @@ object ThaumcraftCommonClient : BaseModInitializer() {
                 render.get() as BlockEntityRenderer<BlockEntity>
             }
         }
+
+
+//        Ref.CLIENT_ENTITY_REGISTERER_MAP.map { (id, render) ->
+//
+//            val type = id.getRegBlockEntityType<BlockEntity>() //as BlockEntityType<*>
+//
+//            BlockEntityRendererRegistry.register(type) {
+//                render.get() as BlockEntityRenderer<BlockEntity>
+//            }
+//        }
 
 
 
@@ -77,12 +93,9 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 //        inGameHud = InGameHud()
 //        CottonHud.add( inGameHud, 20, -54, 40, 40)
 
-        GeoArmorRenderer.registerArmorRenderer<ClientPlayerEntity>(
-            ThaumcraftArmorRenderer(),
-            GOGLES_REVEALING.get()
-        )
 
-        RadialMenuGui(mappingMain)
+
+//        RadialMenuGui(mappingMain)
 
         keyBinding(mappingMain) {
             when (it) {
@@ -124,6 +137,10 @@ object ThaumcraftCommonClient : BaseModInitializer() {
             }
         }
 
+        GlobalScope.launch {
+            RadialMenuGui(mappingMain)
+        }
+
 
 //        literal("config")
 //            .executes(io.github.cottonmc.test.client.LibGuiTestClient.openScreen(Function<MinecraftClient, LightweightGuiDescription> { client: MinecraftClient ->
@@ -136,7 +153,13 @@ object ThaumcraftCommonClient : BaseModInitializer() {
 
 //        CottonHud.add( WLabel(Text.literal("Test label1")), 10, -30, 10, 10);
 
-        ScreenNetworking.initClient()
+
+
+        try {
+            ScreenNetworking.initClient()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
 
     }
 

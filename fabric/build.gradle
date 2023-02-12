@@ -94,11 +94,11 @@ dependencies {
 //    }
 
 //    common1(project(path: ":kenzaMcApi"))
-    common1(project(path: ":kenzaMcApi", configuration: "namedElements")) { transitive false }
-    include(project(path: ":kenzaMcApi"))
+    common1(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
+    include(project(path: ":kenzaCore"))
 
     modRuntimeOnly(fileTree(dir: 'libs_dev', include: ['*.jar']))
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version}"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version_fabric}"
     modImplementation("com.github.glitchfiend:TerraBlender-fabric:${project.terrablender_version}")
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
 //    modImplementation(project(path: ":mlp", configuration: "namedElements")) { transitive false }

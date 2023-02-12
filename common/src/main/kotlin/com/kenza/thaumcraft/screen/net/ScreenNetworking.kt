@@ -9,7 +9,6 @@ import io.kenza.support.utils.identifier
 import io.kenza.support.utils.isRenderThread
 import io.kenza.support.utils.kotlin.safeCast
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
@@ -53,7 +52,7 @@ object ScreenNetworking {
     }
 
     fun send(message: Identifier) {
-        val buf = PacketByteBufs.create();
+        val buf = PacketByteBuf(Unpooled.buffer())
         buf.writeIdentifier(message)
         val netPackerId = if (!isRenderThread()) SCREEN_MESSAGE_S2C else SCREEN_MESSAGE_C2S
 

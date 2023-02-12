@@ -66,6 +66,11 @@ class RadialMenuGui(
             Item.fromBlock(block).defaultStack
         } ?: emptyList()
 
+//        if(availabledOres.isEmpty()){
+//            mc.currentScreen?.close()
+//            return
+//        }
+
         val root = (rootPanel as WGridPanel)
         root.setSize(256, 256)
 //        val stack = mc.player?.inventory?.getStack(0)
@@ -89,6 +94,8 @@ class RadialMenuGui(
 
         root.insets = Insets.NONE
     }
+
+
 
 
     fun createButton(stack: ItemStack): WRadialButton {

@@ -8,12 +8,14 @@ architectury {
     platformSetupLoomIde()
     forge()
 }
+def dataOutput1 = '../common/src/main/generated'
+def dataOutput2 = '../common/src/main/resources'
+
 sourceSets {
-    main{
+    main {
         resources {
-            srcDirs += [
-                    'src/main/generated'
-            ]
+            srcDirs += dataOutput1
+            srcDirs += dataOutput2
         }
     }
 }
@@ -81,7 +83,15 @@ dependencies {
 
     modImplementation fileTree(dir: 'libs', include: ['*.jar'])
     modImplementation fileTree(dir: 'libs_mods', include: ['*.jar'])
+
+//    common1(project(path: ":kenzaCore", configuration: "namedElements")) {
+//        transitive false
+//    }
+
+
     common(fileTree(dir: 'libs_dev', include: ['*.jar']))
+    shadowCommon fileTree(dir: 'libs_dev', include: ['*.jar'])
+
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
 
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
@@ -100,28 +110,42 @@ dependencies {
 //        transitive = false
 //    }
 
-    common1(project(path: ":kenzaMcApi", configuration: "namedElements")) {
+    common(project(path: ":kenzaCore", configuration: "namedElements")) {
+        transitive false
+    }
+    shadowCommon(project(path: ":kenzaCore", configuration: "transformProductionForge")){
         transitive false
     }
 
-    shadowCommon1(project(path: ":kenzaMcApi", configuration: "transformProductionForge")) {
-        transitive false
-    }
+//    shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionForge")) {
+//        transitive false
+//    }
 
 
     common(project(path: ":common", configuration: "namedElements")) {
         transitive false
-        exclude module: "libgui"
     }
 
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
-        transitive = false
-        exclude module: "libgui"
+    shadowCommon(project(path: ":common" , configuration: "transformProductionForge")){
+        transitive false
     }
+
+    modRuntimeOnly "software.bernie.geckolib:geckolib-forge-1.19:${rootProject.geckolib_version_forge}"
+//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${rootProject.fabric_rei_version}"
+//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-plugin-compatibilities-forge:9.1.530"
+//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rootProject.fabric_rei_version}"
+//    common "me.shedaniel:RoughlyEnoughItems-forge:${project.fabric_rei_version}"
+//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:${project.fabric_rei_version}"
+//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${project.fabric_rei_version}"
+//    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
+//        transitive = false
+//        exclude module: "libgui"
+//    }
 }
 
 processResources {
     inputs.property "version", project.version
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
