@@ -52,7 +52,9 @@ sourceSets {
     main {
         resources {
             srcDirs += dataOutput1
-            srcDirs += dataOutput2
+            if (gradle.startParameter.taskNames == ["build"]) {
+                srcDirs += dataOutput2
+            }
         }
     }
 }
@@ -94,8 +96,6 @@ dependencies {
 //    }
 
 //    common1(project(path: ":kenzaMcApi"))
-    common1(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
-    include(project(path: ":kenzaCore"))
 
     modRuntimeOnly(fileTree(dir: 'libs_dev', include: ['*.jar']))
     modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version_fabric}"
@@ -127,8 +127,19 @@ dependencies {
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
+
+    if (gradle.startParameter.taskNames == ["build"]) {
+        common(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
+        common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    }else{
+        implementation(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
+        implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
+    }
+
+    include(project(path: ":kenzaCore"))
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+
 
 //    common(project(path: ":common", configuration: "namedElements")) { transitive false }
 //    include(project(path: ":common"))
@@ -139,7 +150,7 @@ dependencies {
 //    include(project(path: ":common"))
 //    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-//    modCompileOnly("net.oskarstrom:DashLoader:2.0-dev12")
+    modCompileOnly("net.oskarstrom:DashLoader:2.0-dev12")
 
 }
 

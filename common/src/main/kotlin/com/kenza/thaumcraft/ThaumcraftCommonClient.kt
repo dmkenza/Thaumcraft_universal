@@ -1,21 +1,22 @@
 package com.kenza.thaumcraft
 
 import com.kenza.thaumcraft.MixinFields.unbindAll_KeyBinding_enabled
-import com.kenza.thaumcraft.client.render.ThaumcraftArmorRenderer
 import com.kenza.thaumcraft.item.ElementalPickItem
-import com.kenza.thaumcraft.reg.GOGLES_REVEALING
 import com.kenza.thaumcraft.screen.ClientScreen
 import com.kenza.thaumcraft.screen.InGameHud
 import com.kenza.thaumcraft.screen.RadialMenuGui
 import com.kenza.thaumcraft.screen.net.ScreenNetworking
-import dev.architectury.platform.Platform
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
 import io.github.cottonmc.cotton.gui.client.CottonHud
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
+import io.kenza.support.base.BaseClientInitializer
+import io.kenza.support.utils.keys.KeyAction
+import io.kenza.support.utils.keys.KeyActionReceiver
 import io.kenza.support.utils.base.*
 import io.kenza.support.utils.getRegBlockEntityType
 import io.kenza.support.utils.identifier
+import io.kenza.support.utils.keys.ActionBinder
 import io.kenza.support.utils.kotlin.safeCast
 import io.kenza.support.utils.mc
 import io.kenza.support.utils.reg.Ref
@@ -23,14 +24,12 @@ import io.kenza.support.utils.reg.Ref.KEY_BINDINGS_MAP
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
 import org.lwjgl.glfw.GLFW
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
 
 
-object ThaumcraftCommonClient : BaseModInitializer() {
+object ThaumcraftCommonClient : BaseClientInitializer() {
 
     var radialMenuScreen: RadialMenuGui? = null
 ////        RadilMenuScreen()

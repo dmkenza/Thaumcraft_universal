@@ -11,7 +11,7 @@ import potionstudios.byg.common.item.BYGArmorMaterial
 import potionstudios.byg.common.item.BYGItems
 import java.util.function.Supplier
 
-class TArmorMaterials private constructor(
+class ArmorMaterialTC private constructor(
     private val name: String,
     private val durabilityMultiplier: Int,
     private val protectionAmounts: IntArray,

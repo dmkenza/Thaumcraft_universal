@@ -110,10 +110,10 @@ dependencies {
 //        transitive = false
 //    }
 
-    common(project(path: ":kenzaCore", configuration: "namedElements")) {
+    common1(project(path: ":kenzaCore", configuration: "namedElements")) {
         transitive false
     }
-    shadowCommon(project(path: ":kenzaCore", configuration: "transformProductionForge")){
+    shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionForge")){
         transitive false
     }
 

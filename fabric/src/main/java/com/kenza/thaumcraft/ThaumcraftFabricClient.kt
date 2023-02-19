@@ -1,7 +1,7 @@
 package com.kenza.thaumcraft
 
 import com.kenza.thaumcraft.client.render.ThaumcraftArmorRenderer
-import com.kenza.thaumcraft.reg.GOGLES_REVEALING
+import com.kenza.thaumcraft.reg.ItemTC
 import io.github.cottonmc.cotton.gui.impl.client.LibGuiClient
 import io.kenza.support.utils.openLastWorldOnInit
 import net.fabricmc.api.ClientModInitializer
@@ -16,7 +16,7 @@ class ThaumcraftFabricClient : ClientModInitializer {
 
         GeoArmorRenderer.registerArmorRenderer<ClientPlayerEntity>(
             ThaumcraftArmorRenderer(),
-            GOGLES_REVEALING.get()
+            ItemTC.goggles_revealing.item()
         )
 
 //        ModRegistriesClient.INSTANCE.onInit();

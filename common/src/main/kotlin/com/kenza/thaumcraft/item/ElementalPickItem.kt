@@ -1,7 +1,7 @@
 package com.kenza.thaumcraft.item
 
 import com.kenza.thaumcraft.MixinFields
-import com.kenza.thaumcraft.reg.SoundFX
+import com.kenza.thaumcraft.reg.SoundTC
 import com.kenza.thaumcraft.screen.interfaces.RadialPanelHandleable
 import io.kenza.support.annotations.NbtKey
 import io.kenza.support.utils.*
@@ -61,10 +61,10 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
             }
 
             val selectedOreRawId = if (blockState?.block is OreBlock) {
-                SoundFX.cameraticks.playSound(context.world, context.blockPos, player)
+                SoundTC.cameraticks.playSound(context.world, context.blockPos, player)
                 blockState.block.id().toString()
             } else {
-                SoundFX.playCameraClack(context.world, context.blockPos, player)
+                SoundTC.playCameraClack(context.world, context.blockPos, player)
                 null
             }
 
@@ -94,7 +94,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
                 }
             )
         }
-        SoundFX.cameraticks.playSound(player.world, player.blockPos, player)
+        SoundTC.cameraticks.playSound(player.world, player.blockPos, player)
     }
 
     fun getSelectedOreStack(itemStack: ItemStack): ItemStack? {
@@ -225,7 +225,7 @@ class ElementalPickItem(material: ToolMaterial?, attackDamage: Int, attackSpeed:
                     val soundVolume = blocksScore.cutByRange(0.3, 1.0).toFloat() - KMath.getBetween(0.0f, 0.05f)
                     if (isEmitAction) {
 
-                        SoundFX.neutralization.playSound(
+                        SoundTC.neutralization.playSound(
                             world, player.blockPos, player, soundVolume,
                             1f - KMath.getBetween(0f, 0.05f)
                         )

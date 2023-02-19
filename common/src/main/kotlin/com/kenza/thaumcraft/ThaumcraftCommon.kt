@@ -1,6 +1,5 @@
 package com.kenza.thaumcraft
 
-import com.google.common.base.Suppliers
 import com.kenza.thaumcraft.block.ArcanePedestalBlock
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.client.render.ArcanePedestalBlockEntityRenderer
@@ -8,160 +7,42 @@ import com.kenza.thaumcraft.item.*
 import com.kenza.thaumcraft.recipe.InfusingRecipeSerializer
 import com.kenza.thaumcraft.recipe.InfusionRecipe
 import com.kenza.thaumcraft.reg.*
-import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_ARCANE_AM
-import com.kenza.thaumcraft.reg.TArmorMaterials.Companion.THAUMCRAFT_DEFAULT_AM
+import com.kenza.thaumcraft.reg.init.initTools
 import com.kenza.thaumcraft.screen.net.ScreenNetworking
-import dev.architectury.registry.registries.DeferredRegister
-import dev.architectury.registry.registries.Registries
+import io.kenza.support.base.BaseInitializer
 import io.kenza.support.utils.*
-import io.kenza.support.utils.reg.DEFAULT_SINGLE_ITEM_SETTING
-import io.kenza.support.utils.reg.Ref.BLOCKS
-import io.kenza.support.utils.reg.Ref.BLOCK_ENTITY_TYPES
-import io.kenza.support.utils.reg.Ref.ITEMS
-import io.kenza.support.utils.reg.Ref.MOD_ID
 import io.kenza.support.utils.reg.Ref.MOD_TAB
-import io.kenza.support.utils.reg.Ref.POINT_OF_INTEREST_TYPES
-import io.kenza.support.utils.reg.Ref.RECIPE_SERIALIZERS
-import io.kenza.support.utils.reg.Ref.RECIPE_TYPES
-import io.kenza.support.utils.reg.Ref.SCREEN_HANDLERS
-import io.kenza.support.utils.reg.Ref.SOUNDS_EVENTS
-import io.kenza.support.utils.reg.Ref.VILLAGER_PROFESSIONS
 import io.kenza.support.utils.reg.Ref._MOD_ID
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
-import net.minecraft.screen.ScreenHandlerType
-import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
-import potionstudios.byg.common.item.BYGTier
-import java.util.function.Supplier
 
 ///kill @e[type=!player]
 ///gamerule doMobSpawning false
 ///gamerule doDaylightCycle false
 ///data get entity @s SelectedItem
 
-object ThaumcraftCommon {
+object ThaumcraftCommon : BaseInitializer() {
 
     init {
         _MOD_ID = "thaumcraft"
-
-        ITEMS = DeferredRegister.create<Item>(MOD_ID, Registry.ITEM_KEY)
-        BLOCKS = DeferredRegister.create(MOD_ID, Registry.BLOCK_KEY)
-        BLOCK_ENTITY_TYPES = DeferredRegister.create(MOD_ID, Registry.BLOCK_ENTITY_TYPE_KEY)
-
-        POINT_OF_INTEREST_TYPES = DeferredRegister.create(MOD_ID, Registry.POINT_OF_INTEREST_TYPE_KEY)
-        VILLAGER_PROFESSIONS = DeferredRegister.create(MOD_ID, Registry.VILLAGER_PROFESSION_KEY)
-
-        SOUNDS_EVENTS =
-            DeferredRegister.create<SoundEvent>(MOD_ID, Registry.SOUND_EVENT_KEY)
-        SCREEN_HANDLERS = DeferredRegister.create<ScreenHandlerType<*>>(MOD_ID, Registry.MENU_KEY)
-
-        RECIPE_SERIALIZERS = DeferredRegister.create(MOD_ID, Registry.RECIPE_SERIALIZER_KEY)
-        RECIPE_TYPES = DeferredRegister.create(MOD_ID, Registry.RECIPE_TYPE_KEY)
+        createRegisters()
     }
 
-
-    val REGISTRIES: Supplier<Registries> = Suppliers.memoize {
-        Registries.get(MOD_ID)
-    }
-
-    val items = listOf(
-        "focus_pouch", "shard", "thaumonomicon"
-    )
-
-    fun onInitialize() {
+    override fun onInitialize() {
 
         MOD_TAB = commonPlatformHelper.registerCreativeModeTab(identifier("thaumcraft_tab")) {
-            GOGLES_REVEALING.get().defaultStack
+            ItemTC.goggles_revealing.id().getRegSupItem().get()?.defaultStack
         }
+        SoundTC.registerAll()
+        MusicDiscTC.registerAll()
+        initTools()
 
-        SoundFX.values().map {
-            identifier(it.name).apply {
-                soundEvent()
-            }
-        }
-
-        identifier("traveller_boots").apply {
-            TRAVELLER_BOOTS = item {
-                BootsTravellerItem(
-                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.FEET, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-        identifier("goggles_revealing").apply {
-            GOGLES_REVEALING = item {
-                ThaumcraftArmorItem(
-                    THAUMCRAFT_DEFAULT_AM, EquipmentSlot.HEAD, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-        identifier("elemental_hoe").apply {
-            ELEMENTAL_HOE = item {
-                ElementalHoeItem(
-                    BYGTier.PENDORITE, 0, 0.0f, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-        identifier("elemental_shovel").apply {
-            ELEMENTAL_SHOVEL = item {
-                ElementalShovelItem(
-                    BYGTier.PENDORITE, 2.0f, -3.0f, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-
-        identifier("elemental_axe").apply {
-            ELEMENTAL_AXE = item {
-                ElementalAxeItem(
-                    BYGTier.PENDORITE, 4f, -2.4f, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-        identifier("elemental_sword").apply {
-            ELEMENTAL_SWORD = item {
-                ElementalSwordItem(
-                    BYGTier.PENDORITE, 4, -2.4f, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-
-        identifier("elemental_pick").apply {
-
-            ELEMENTAL_PICK = item {
-                ElementalPickItem(
-                    BYGTier.PENDORITE, 2, -2.8f, Item.Settings()
-                        .group(MOD_TAB)
-                )
-            }
-            itemDataGen()
-        }
-
-        identifier("salis_mundus").apply {
-
+        ItemTC.salis_mundus.register {
             val foodComponent = FoodComponent.Builder()
                 .hunger(10)
                 .alwaysEdible()
@@ -179,15 +60,10 @@ object ThaumcraftCommon {
             }
 
             itemDataGen()
-
         }
 
-        items.forEach {
-            identifier(it).apply {
-                item { Item(DEFAULT_SINGLE_ITEM_SETTING) }
-                itemDataGen()
-            }
-        }
+        ItemTC.registerRestItems()
+
 
         identifier("arcane_stone").apply {
             val block = createBlock {
@@ -217,13 +93,6 @@ object ThaumcraftCommon {
         }
 
         identifier("arcane_pedestal").apply {
-//            val slab = {
-//                StairsBlock(
-//                    identifier("arcane_stone").getRegBlock<Block>()!!.get().defaultState,
-//                    STONE_SETTINGS
-//                )
-//            }
-
             val block = {
                 ArcanePedestalBlock(
                     this,
@@ -254,31 +123,20 @@ object ThaumcraftCommon {
         }
 
         identifier(InfusionRecipe.INFUSUING_ID).apply {
-            recipeType{
+            recipeType {
                 InfusionRecipe.Type.INSTANCE
             }
-            recipeSerializer{
+            recipeSerializer {
                 InfusingRecipeSerializer.INSTANCE
             }
         }
 
+
         ScreenNetworking.initServer()
 
-        finishInit()
+        super.onInitialize()
     }
 
 
-    fun finishInit() {
-        SOUNDS_EVENTS.register()
-        BLOCKS.register()
-        ITEMS.register()
-        BLOCK_ENTITY_TYPES.register()
-        SCREEN_HANDLERS.register()
-
-        POINT_OF_INTEREST_TYPES.register()
-        VILLAGER_PROFESSIONS.register()
-        RECIPE_SERIALIZERS.register()
-        RECIPE_TYPES.register()
-    }
 
 }

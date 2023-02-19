@@ -1,5 +1,6 @@
 package com.kenza.thaumcraft;
 
+import com.kenza.thaumcraft.reg.ItemTC;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -21,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.kenza.thaumcraft.reg.DictionaryKt.GOGLES_REVEALING;
-import static com.kenza.thaumcraft.reg.DictionaryKt.TRAVELLER_BOOTS;
 
 public class ThaumcraftArmorItem extends GeckoArmorItem implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -63,7 +62,7 @@ public class ThaumcraftArmorItem extends GeckoArmorItem implements IAnimatable {
             // Make sure the player is wearing all the armor. If they are, continue playing
             // the animation, otherwise stop
             boolean isWearingAll = armorList.containsAll(Arrays.asList(
-                    GOGLES_REVEALING
+                    ItemTC.goggles_revealing.regSup()
             ));
             return isWearingAll ? PlayState.CONTINUE : PlayState.STOP;
         }

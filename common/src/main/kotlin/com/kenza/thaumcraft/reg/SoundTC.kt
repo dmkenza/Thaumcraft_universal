@@ -6,9 +6,8 @@ import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import kotlin.math.absoluteValue
 
-enum class SoundFX {
+enum class SoundTC {
     cameraticks, wandfail, hhoff, hhon, neutralization, scan, spill, upgrade, urnbreak, whispers,
 
     bubble1, bubble2, bubble3, bubble4,
@@ -17,6 +16,8 @@ enum class SoundFX {
     shock1, shock2, wand1, wand2, wand3,
     wind1, wind2, write1, write2, zap1, zap2;
 
+
+    var FOLDER: String = ""
 
     val soundEvent: SoundEvent
         get() = identifier(name).run {
@@ -54,7 +55,7 @@ enum class SoundFX {
         private val zaps = listOf(zap1, zap2)
 
 
-        private fun playSound(world: World, pos: BlockPos, list: List<SoundFX>, player: PlayerEntity) =
+        private fun playSound(world: World, pos: BlockPos, list: List<SoundTC>, player: PlayerEntity) =
             list.pickRandomly().playSound(world, pos, player)
 
 
@@ -62,6 +63,12 @@ enum class SoundFX {
         fun playCameraClack(world: World, pos: BlockPos, player: PlayerEntity) =
             playSound(world, pos, cameraclacks, player)
 
-
+        fun registerAll() {
+            values().map {
+                identifier(it.name).apply {
+                    soundEvent()
+                }
+            }
+        }
     }
 }

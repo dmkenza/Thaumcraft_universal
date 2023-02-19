@@ -1,0 +1,44 @@
+{
+  "music.game": {
+    "replace": false,
+    "sounds": [
+      {
+        "name": "thaumcraft:music/m0_moonlight_hall",
+        "stream": true
+      },
+      {
+        "name": "thaumcraft:music/m1_enchanted_journey",
+        "stream": true
+      },
+      {
+        "name": "thaumcraft:music/m2_the_snow_queen",
+        "stream": true
+      },
+      {
+        "name": "thaumcraft:music/m3_the_other_side_of_the_door",
+        "stream": true
+      }
+    ]
+  },
+  "music.menu": {
+    "replace": false,
+    "sounds": [
+      {
+        "name": "thaumcraft:music/m0_moonlight_hall",
+        "stream": true
+      },
+      {
+        "name": "thaumcraft:music/m1_enchanted_journey",
+        "stream": true
+      },
+      {
+        "name": "thaumcraft:music/m2_the_snow_queen",
+        "stream": true
+      },
+      {
+        "name": "thaumcraft:music/m3_the_other_side_of_the_door",
+        "stream": true
+      }
+    ]
+  }
+}

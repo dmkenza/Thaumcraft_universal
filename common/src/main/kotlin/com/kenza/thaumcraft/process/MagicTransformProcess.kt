@@ -3,7 +3,7 @@ package com.kenza.thaumcraft.process
 import com.kenza.thaumcraft.block.ArcanePedestalBlockEntity
 import com.kenza.thaumcraft.recipe.InfusionRecipe
 import com.kenza.thaumcraft.reg.SALIS_MUNDUS_ITEM
-import com.kenza.thaumcraft.reg.SoundFX
+import com.kenza.thaumcraft.reg.SoundTC
 import io.kenza.support.utils.identifier
 import net.minecraft.block.BlockState
 import net.minecraft.inventory.SimpleInventory
@@ -14,13 +14,6 @@ import net.minecraft.world.World
 import java.util.*
 
 object MagicTransformProcess {
-
-    val BYG_PENDORITE_PICKAXE_ID = identifier("byg:pendorite_pickaxe")
-
-    val transormerItems = listOf(
-        SALIS_MUNDUS_ITEM
-    )
-
 
     fun isTransformer(itemOnHand: ItemStack?): Boolean {
         return itemOnHand?.item?.asItem() == SALIS_MUNDUS_ITEM.get()
@@ -62,7 +55,7 @@ object MagicTransformProcess {
             }
 
 
-            SoundFX.playWandSound(world, pos, player)
+            SoundTC.playWandSound(world, pos, player)
 
 
             entity.markDirty()
