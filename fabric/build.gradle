@@ -27,7 +27,7 @@ loom {
                 main {
                     resources {
 //                        srcDirs += dataOutput1
-                        srcDirs += dataOutput2
+//                        srcDirs += dataOutput2
                     }
                 }
             }
@@ -53,7 +53,7 @@ sourceSets {
         resources {
             srcDirs += dataOutput1
             if (gradle.startParameter.taskNames == ["build"]) {
-                srcDirs += dataOutput2
+//                srcDirs += dataOutput2
             }
         }
     }
@@ -130,14 +130,17 @@ dependencies {
 
     if (gradle.startParameter.taskNames == ["build"]) {
         common(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
-        common(project(path: ":common", configuration: "namedElements")) { transitive false }
+        common1(project(path: ":common", configuration: "namedElements")) { transitive false }
+        shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+//        shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionFabric")) { transitive false }
+        include(project(path: ":kenzaCore"))
+
+
     }else{
         implementation(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
         implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
     }
 
-    include(project(path: ":kenzaCore"))
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
 
 

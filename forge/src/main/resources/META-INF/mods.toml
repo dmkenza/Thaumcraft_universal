@@ -36,3 +36,25 @@ mandatory = true
 versionRange = "[6.2.43,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.thaumcraft]]
+modId = "geckolib3"
+mandatory = true
+versionRange = "[3.1.30,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.thaumcraft]]
+modId = "byg"
+mandatory = true
+versionRange = "[2.0.0.13,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.thaumcraft]]
+modId = "kotlinforforge"
+mandatory = true
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+

@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
     id "kotlin"
@@ -15,7 +17,9 @@ sourceSets {
     main {
         resources {
             srcDirs += dataOutput1
-            srcDirs += dataOutput2
+//            if (gradle.startParameter.taskNames == ["build"]) {
+//                srcDirs += dataOutput2
+//            }
         }
     }
 }
@@ -57,6 +61,12 @@ loom {
 
 }
 
+repositories {
+    flatDir {
+        dirs("libs_dev", "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\build\\devlibs", "C:\\projects_mc\\support\\kenzaMcApi\\1_19_2\\build\\libs")
+    }
+}
+
 configurations {
     shadow
     common
@@ -69,7 +79,7 @@ configurations {
 
     compileClasspath.extendsFrom common1
     runtimeClasspath.extendsFrom common1
-    developmentFabric.extendsFrom common1
+    developmentForge.extendsFrom common1
 }
 
 dependencies {
@@ -89,8 +99,6 @@ dependencies {
 //    }
 
 
-    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
-    shadowCommon fileTree(dir: 'libs_dev', include: ['*.jar'])
 
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
 
@@ -110,17 +118,43 @@ dependencies {
 //        transitive = false
 //    }
 
-    common1(project(path: ":kenzaCore", configuration: "namedElements")) {
-        transitive false
-    }
-    shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionForge")){
-        transitive false
-    }
+//    common1(project(path: ":kenzaCore", configuration: "namedElements")) {
+//        transitive false
+//    }
+//    shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionForge")){
+//        transitive false
+//    }
+//    include(project(path: ":kenzaCore", configuration: "transformProductionForge")){
+//        transitive false
+//    }
+//
+////    shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionForge")) {
+////        transitive false
+////    }
+//
+//
 
-//    shadowCommon1(project(path: ":kenzaCore", configuration: "transformProductionForge")) {
+//    implementation(":thaumcraft-0.2.0")
+//    common1(project(path: ":common", configuration: "namedElements")) {
+//        transitive false
+//    }
+//    shadowCommon1(project(path: ":common" , configuration: "transformProductionForge")){
+//        transitive false
+//    }
+    implementation(":thaumcraft-0.2.0-dev")
+    shadow(":thaumcraft-0.2.0-dev")
+
+//    shadowCommon(project(path: ":kenzaCore" , configuration: "transformProductionForge")){
 //        transitive false
 //    }
 
+//    common1(project(path: ":kenzaCore", configuration: "namedElements")) {
+//        transitive false
+//    }
+
+//    implementation(project(path: ":kenzaCore"))
+
+//    implementation project(path: ':kenzaCore', configuration: 'common')
 
     common(project(path: ":common", configuration: "namedElements")) {
         transitive false
@@ -129,6 +163,26 @@ dependencies {
     shadowCommon(project(path: ":common" , configuration: "transformProductionForge")){
         transitive false
     }
+
+//    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
+//    implementation  fileTree(dir: 'libs_dev', include: ['*.jar'])
+//    include  fileTree(dir: 'libs_dev', include: ['*.jar'])
+    implementation(":LibGui-6.5.0-dev-shadow+1.19.2")// { transitive false }
+//    common (":LibGui-6.5.0-dev-shadow+1.19.2")
+//    include (":LibGui-6.5.0-dev-shadow+1.19.2")
+    include(":LibGui-6.5.0-dev-shadow+1.19.2") //{ transitive false }
+
+//    if (gradle.startParameter.taskNames == ["build"]) {
+//        common(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
+//        common(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    }else{
+//        implementation(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
+//        implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    }
+
+//    include(project(path: ":kenzaCore"))
+//    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
+
 
     modRuntimeOnly "software.bernie.geckolib:geckolib-forge-1.19:${rootProject.geckolib_version_forge}"
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${rootProject.fabric_rei_version}"
@@ -151,14 +205,26 @@ processResources {
         expand "version": project.version
     }
 }
-
+//task relocateShadowJar(type: ConfigureShadowRelocation) {
+//    target = tasks.shadowJar
+//
+//    prefix = 'rationale.emotions'
+//}
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
 
-    configurations = [project.configurations.shadowCommon]
+    relocate ("io.kenza.support", "qwe.io.kenza.support")
+//    dependsOn(relocateShadowJar)
+
+    configurations = [project.configurations.shadowCommon, project.configurations.shadow]
+    mergeServiceFiles()
     classifier "dev-shadow"
 }
+
+
+
+
 
 remapJar {
     input.set shadowJar.archiveFile
@@ -170,8 +236,18 @@ jar {
     classifier "dev"
 }
 
+tasks.withType(Tar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(Zip) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+
 sourcesJar {
     def commonSources = project(":common").sourcesJar
+//    dependsOn(relocateShadowJar)
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }

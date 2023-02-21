@@ -8,6 +8,7 @@ import com.kenza.thaumcraft.screen.RadialMenuGui
 import com.kenza.thaumcraft.screen.net.ScreenNetworking
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
+import dev.architectury.registry.client.rendering.RenderTypeRegistry
 import io.github.cottonmc.cotton.gui.client.CottonHud
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.kenza.support.base.BaseClientInitializer
@@ -25,7 +26,6 @@ import io.kenza.support.utils.reg.Ref.DATA_GEN_WOOD_MATERIAL_NAMES
 import io.kenza.support.utils.reg.Ref.KEY_BINDINGS_MAP
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.option.KeyBinding
@@ -51,8 +51,8 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
             identifier(it + "_leaves").getRegBlock<Block>() to
             identifier(it + "_sapling").getRegBlock<Block>()
         }.forEach { (leaves, sapling) ->
-            BlockRenderLayerMap.INSTANCE.putBlock(leaves!!.get(), RenderLayer.getCutout());
-            BlockRenderLayerMap.INSTANCE.putBlock(sapling!!.get(), RenderLayer.getCutout());
+            RenderTypeRegistry.register( RenderLayer.getCutout(), leaves!!.get())
+            RenderTypeRegistry.register( RenderLayer.getCutout(), sapling!!.get())
         }
 
 
