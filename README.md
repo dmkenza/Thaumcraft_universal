@@ -5,3 +5,6 @@
 <p><span style="font-size: 18px;"><a href="https://www.curseforge.com/minecraft/mc-mods/geckolib"><em><strong>3) GeckoLib<br /></strong></em></a></span></p>
 <p><span style="font-size: 18px;"><a href="https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fabric"><em><strong>4) Oh the Biomes You'll Go&nbsp;</strong></em></a></span></p>
 <p><br /><br /></p>
+<p>Credits:</p>
+<p>Code: DmitryKenza</p>
+<p>Assets: Azanor13, Dan Scott, mr.Hazard, Lorc, bonemouse, chicken_bones, Rorax, J. W. Bjerk, BitterBusiness </p>
