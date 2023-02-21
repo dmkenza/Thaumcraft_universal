@@ -9,3 +9,8 @@ val STONE_SETTINGS = AbstractBlock.Settings
     .of(Material.STONE)
     .requiresTool()
     .strength(6f)
+
+val WOOD_SETTINGS = AbstractBlock.Settings
+    .of(Material.WOOD)
+    .requiresTool()
+    .strength(6f)

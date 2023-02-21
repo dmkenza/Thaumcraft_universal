@@ -15,16 +15,45 @@ import io.kenza.support.utils.reg.Ref.MOD_TAB
 import io.kenza.support.utils.reg.Ref._MOD_ID
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.sapling.SaplingGenerator
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.intprovider.ConstantIntProvider
+import net.minecraft.util.registry.RegistryEntry
+import net.minecraft.world.gen.feature.ConfiguredFeature
+import net.minecraft.world.gen.feature.ConfiguredFeatures
+import net.minecraft.world.gen.feature.Feature
+import net.minecraft.world.gen.feature.TreeFeatureConfig
+import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
+import net.minecraft.world.gen.foliage.BlobFoliagePlacer
+import net.minecraft.world.gen.stateprovider.BlockStateProvider
+import net.minecraft.world.gen.trunk.StraightTrunkPlacer
 
 ///kill @e[type=!player]
 ///gamerule doMobSpawning false
 ///gamerule doDaylightCycle false
 ///data get entity @s SelectedItem
+
+//
+//"greatwood_planks"
+//"greatwood_log"
+//"greatwood_wood"
+//"greatwood_leaves"
+//"stripped_greatwood_log"
+//"stripped_greatwood_wood"
+//
+//"slab"
+//"fence"
+//"fence_gate"
+//"stairs"
+//"button"
+//"plate"
+//"door"
+//"trapdoor"
+
 
 object ThaumcraftCommon : BaseInitializer() {
 
@@ -38,6 +67,40 @@ object ThaumcraftCommon : BaseInitializer() {
         MOD_TAB = commonPlatformHelper.registerCreativeModeTab(identifier("thaumcraft_tab")) {
             ItemTC.goggles_revealing.id().getRegSupItem().get()?.defaultStack
         }
+
+
+
+//
+//        identifier("greatwood_planks").apply {
+//            val block = createBlock {
+//                WOOD_SETTINGS
+//            }
+//            blockAndItem(block)
+////            stoneMaterialDataGen()
+//        }
+//
+//        identifier("greatwood_log").apply {
+//            val block = createBlock {
+//                WOOD_SETTINGS
+//            }
+//            blockAndItem(block)
+//        }
+//
+//        identifier("greatwood_wood").apply {
+//            val block = createBlock {
+//                WOOD_SETTINGS
+//            }
+//            blockAndItem(block)
+//        }
+//
+//        identifier("greatwood_planks").apply {
+//            val block = createBlock {
+//                WOOD_SETTINGS
+//            }
+//            blockAndItem(block)
+//        }
+
+
         SoundTC.registerAll()
         MusicDiscTC.registerAll()
         initTools()
@@ -63,34 +126,8 @@ object ThaumcraftCommon : BaseInitializer() {
         }
 
         ItemTC.registerRestItems()
+        BlockTC.registerAll()
 
-
-        identifier("arcane_stone").apply {
-            val block = createBlock {
-                STONE_SETTINGS
-            }
-            blockAndItem(block)
-            stoneMaterialDataGen()
-        }
-
-        identifier("arcane_stone_slab").apply {
-            val slab = {
-                SlabBlock(
-                    STONE_SETTINGS
-                )
-            }
-            blockAndItem(slab)
-        }
-
-        identifier("arcane_stone_stairs").apply {
-            val slab = {
-                StairsBlock(
-                    identifier("arcane_stone").getRegBlock<Block>()!!.get().defaultState,
-                    STONE_SETTINGS
-                )
-            }
-            blockAndItem(slab)
-        }
 
         identifier("arcane_pedestal").apply {
             val block = {
@@ -136,7 +173,6 @@ object ThaumcraftCommon : BaseInitializer() {
 
         super.onInitialize()
     }
-
 
 
 }

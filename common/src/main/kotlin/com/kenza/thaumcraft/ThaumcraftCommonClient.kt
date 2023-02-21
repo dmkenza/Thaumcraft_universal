@@ -14,17 +14,22 @@ import io.kenza.support.base.BaseClientInitializer
 import io.kenza.support.utils.keys.KeyAction
 import io.kenza.support.utils.keys.KeyActionReceiver
 import io.kenza.support.utils.base.*
+import io.kenza.support.utils.getRegBlock
 import io.kenza.support.utils.getRegBlockEntityType
 import io.kenza.support.utils.identifier
 import io.kenza.support.utils.keys.ActionBinder
 import io.kenza.support.utils.kotlin.safeCast
 import io.kenza.support.utils.mc
 import io.kenza.support.utils.reg.Ref
+import io.kenza.support.utils.reg.Ref.DATA_GEN_WOOD_MATERIAL_NAMES
 import io.kenza.support.utils.reg.Ref.KEY_BINDINGS_MAP
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.option.KeyBinding
+import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
 import org.lwjgl.glfw.GLFW
 
@@ -36,12 +41,20 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
 ////        ScrollingTestGui()
 ////    }a
 
-    var inGameHud: InGameHud? =null
-
+    var inGameHud: InGameHud? = null
 
 
     override fun onInitialize() {
         super.onInitialize()
+
+        DATA_GEN_WOOD_MATERIAL_NAMES.map {
+            identifier(it + "_leaves").getRegBlock<Block>() to
+            identifier(it + "_sapling").getRegBlock<Block>()
+        }.forEach { (leaves, sapling) ->
+            BlockRenderLayerMap.INSTANCE.putBlock(leaves!!.get(), RenderLayer.getCutout());
+            BlockRenderLayerMap.INSTANCE.putBlock(sapling!!.get(), RenderLayer.getCutout());
+        }
+
 
 
 
@@ -65,7 +78,6 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
 //        }
 
 
-
         val mappingMain = KeyBinding(
             "key.thaumcraft.main",
             GLFW.GLFW_KEY_G,
@@ -86,12 +98,11 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
 //        )
 
         inGameHud = InGameHud()
-        CottonHud.add( inGameHud, 20, -28, 24, 24)
+        CottonHud.add(inGameHud, 20, -28, 24, 24)
 
 
 //        inGameHud = InGameHud()
 //        CottonHud.add( inGameHud, 20, -54, 40, 40)
-
 
 
 //        RadialMenuGui(mappingMain)
@@ -105,21 +116,21 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
 //                    CottonHud.add( inGameHud, 20, -28, 24, 24)
 
 
-                    if(mc.currentScreen is ClientScreen){
+                    if (mc.currentScreen is ClientScreen) {
                         return@keyBinding
                     }
 
                     mc.player?.mainHandStack?.item.safeCast<ElementalPickItem>().apply {
                         this ?: return@apply
 
-                        if(mc.player?.isInSneakingPose == true){
+                        if (mc.player?.isInSneakingPose == true) {
                             ScreenNetworking.send(identifier(""))
                             return@keyBinding
                         }
 
                         radialMenuScreen = RadialMenuGui(mappingMain)
                         unbindAll_KeyBinding_enabled = false
-                        openScreen (
+                        openScreen(
                             radialMenuScreen!!
                         )
                         unbindAll_KeyBinding_enabled = true
@@ -127,10 +138,13 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
 
 
                 }
+
                 is KeyAction.ActionHold -> {
                 }
+
                 is KeyAction.ActionUp -> {
                 }
+
                 else -> {
                 }
             }
@@ -153,10 +167,9 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
 //        CottonHud.add( WLabel(Text.literal("Test label1")), 10, -30, 10, 10);
 
 
-
         try {
             ScreenNetworking.initClient()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -174,7 +187,8 @@ object ThaumcraftCommonClient : BaseClientInitializer() {
     private fun openScreen(x: LightweightGuiDescription) {
         val client = mc
         client.setScreen(
-            ClientScreen(x
+            ClientScreen(
+                x
 //                screenFactory.apply(
 //                    client
 //                )

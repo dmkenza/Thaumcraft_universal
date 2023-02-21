@@ -1,11 +1,9 @@
 package com.kenza.thaumcraft.datagen
 
 import io.kenza.support.utils.getRegBlock
-import io.kenza.support.utils.identifier
-import io.kenza.support.utils.reg.Ref.STONES_MATERIALS
+import io.kenza.support.utils.reg.Ref.DATA_GEN_STONES_MATERIAL_NAMES
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
-import net.minecraft.advancement.criterion.InventoryChangedCriterion
 import net.minecraft.block.Block
 import net.minecraft.block.StairsBlock
 import net.minecraft.data.server.recipe.RecipeJsonProvider
@@ -15,9 +13,6 @@ import io.kenza.support.utils.kotlin.to
 import net.minecraft.block.SlabBlock
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
 import net.minecraft.item.Item
-import net.minecraft.predicate.NbtPredicate
-import net.minecraft.predicate.NumberRange
-import net.minecraft.predicate.item.EnchantmentPredicate
 import net.minecraft.predicate.item.ItemPredicate
 
 class RecipesProvider(dataGenerator: FabricDataGenerator?) : FabricRecipeProvider(dataGenerator) {
@@ -28,7 +23,7 @@ class RecipesProvider(dataGenerator: FabricDataGenerator?) : FabricRecipeProvide
 
     override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
 
-        STONES_MATERIALS.map {
+        DATA_GEN_STONES_MATERIAL_NAMES.map {
             it to it + "_stairs"
         }.map { (block, stairs) ->
             block to block.getRegBlock<Block>()!!.get() to stairs.getRegBlock<StairsBlock>()!!.get()
@@ -47,7 +42,7 @@ class RecipesProvider(dataGenerator: FabricDataGenerator?) : FabricRecipeProvide
 
         }
 
-        STONES_MATERIALS.map {
+        DATA_GEN_STONES_MATERIAL_NAMES.map {
             it to it + "_slab"
         }.map { (block, slab) ->
             block to block.getRegBlock<Block>()!!.get() to slab.getRegBlock<SlabBlock>()!!.get()

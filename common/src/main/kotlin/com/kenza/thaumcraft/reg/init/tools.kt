@@ -7,6 +7,7 @@ import com.kenza.thaumcraft.reg.ArmorMaterialTC
 import io.kenza.support.utils.item
 import io.kenza.support.utils.itemDataGen
 import io.kenza.support.utils.reg.Ref
+import net.minecraft.data.client.Models
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.Item
 import potionstudios.byg.common.item.BYGTier
@@ -40,7 +41,7 @@ fun initTools(){
                     .group(Ref.MOD_TAB)
             )
         }
-        itemDataGen()
+        itemDataGen(Models.HANDHELD)
     }
 
 
@@ -52,7 +53,7 @@ fun initTools(){
                     .group(Ref.MOD_TAB)
             )
         }
-        itemDataGen()
+        itemDataGen(Models.HANDHELD)
     }
 
     ItemTC.elemental_hoe.register {
@@ -62,7 +63,7 @@ fun initTools(){
                     .group(Ref.MOD_TAB)
             )
         }
-        itemDataGen()
+        itemDataGen(Models.HANDHELD)
     }
 
     ItemTC.elemental_shovel.register {
@@ -72,7 +73,7 @@ fun initTools(){
                     .group(Ref.MOD_TAB)
             )
         }
-        itemDataGen()
+        itemDataGen(Models.HANDHELD)
     }
 
 
@@ -83,6 +84,6 @@ fun initTools(){
                     .group(Ref.MOD_TAB)
             )
         }
-        itemDataGen()
+        itemDataGen(Models.HANDHELD)
     }
 }
