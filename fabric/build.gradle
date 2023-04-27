@@ -26,8 +26,8 @@ loom {
             sourceSets {
                 main {
                     resources {
-//                        srcDirs += dataOutput1
-//                        srcDirs += dataOutput2
+                        srcDirs += dataOutput1
+                        srcDirs += dataOutput2
                     }
                 }
             }

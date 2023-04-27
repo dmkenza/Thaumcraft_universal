@@ -40,6 +40,7 @@ loom {
 dependencies {
 //    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
     modCompileOnly fileTree(dir: 'libs_dev', include: ['*.jar'])
+    modCompileOnly fileTree(dir: 'libs_dev1', include: ['*.jar'])
     implementation 'com.google.code.gson:gson:2.10.1'
 //    modCompileOnly(project(":kenzaMcApi"))
 //    modApi project(path: ':kenzaMcApi')

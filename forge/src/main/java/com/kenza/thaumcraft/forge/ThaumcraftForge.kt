@@ -25,6 +25,7 @@ class ThaumcraftForge {
 //        SoundDefinition
 //        LibGuiCommon
 
+
         commonPlatformHelper = CommonPlatformHelperForge()
 
         // Submit our event bus to let architectury register our content on the right time

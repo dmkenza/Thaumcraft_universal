@@ -34,30 +34,6 @@ class BootsTravellerItem(
 
 
             if (!isFallFlying) {
-
-
-//                if (this.velocity.lengthSquared() > 1.0E-7) {
-//                }
-
-//                this.velocity = this.velocity.multiply(1.55,1.05,1.55)
-
-//                movementMultiplier =  movementMultiplier.add(
-//                    this.velocity.add(1.55,1.05,1.55)
-//                )
-
-//                val d = this.velocityMultiplier.toDouble()
-//                val vec3d = this.velocity.add(Vec3d(0.1,0.0,0.2))
-//                this.travel(Vec3d( vec3d.x, vec3d.y, vec3d.z))
-//                if (this.isSprinting) {
-//                    val f = this.yaw * 0.017453292f
-//                    this.velocity = this.velocity.add(
-//                        (-MathHelper.sin(f) * 0.2f).toDouble(),
-//                        0.0,
-//                        (MathHelper.cos(f) * 0.2f).toDouble()
-//                    )
-//                }
-
-//                this.velocityDirty = true
                 movementSpeed = 2f
             }
 

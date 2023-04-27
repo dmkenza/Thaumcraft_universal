@@ -7,3 +7,4 @@ accessible method net/minecraft/entity/LivingEntity jump ()V
 accessible method net/minecraft/entity/player/PlayerEntity getVelocityMultiplier ()F
 accessible field net/minecraft/text/TranslatableTextContent key Ljava/lang/String;
 accessible field net/minecraft/util/registry/BuiltinRegistries DEFAULT_VALUE_SUPPLIERS Ljava/util/Map;
+accessible method net/minecraft/entity/Entity getFlag (I)Z

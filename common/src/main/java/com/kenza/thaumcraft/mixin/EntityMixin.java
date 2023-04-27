@@ -17,7 +17,7 @@ import static com.kenza.thaumcraft.utils.EntityUtil.TRAVEL_BOOTS_JUMP_FACTOR;
 import static com.kenza.thaumcraft.utils.EntityUtil.TRAVEL_BOOTS_SPEED_FACTOR;
 
 @Mixin(Entity.class)
-public class EntityMixin {
+public abstract class EntityMixin {
 
 //    @Redirect(
 //            method = "Lnet/minecraft/entity/LivingEntity;travel(Lnet/minecraft/util/math/Vec3d;)V",
@@ -36,10 +36,18 @@ public class EntityMixin {
     public Float oldStepHeight;
 
 
+    @Shadow
+    abstract boolean getFlag(int index);
+
+
     @ModifyVariable(method = "Lnet/minecraft/entity/Entity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V", at = @At("HEAD"), ordinal = 0)
     private Vec3d tc_addSpeedFactor(Vec3d move) {
-        if (EntityUtil.shouldIncreaseSpeedFactor(this)) {
-            if(oldStepHeight == null){
+
+        if (EntityUtil.shouldIncreaseSpeedFactor(this) && (!isFallFlying())) {
+            System.out.println("kenza isFallFlying " + isFallFlying() );
+
+
+            if (oldStepHeight == null) {
                 oldStepHeight = stepHeight;
             }
             stepHeight = oldStepHeight + 0.4f;
@@ -50,7 +58,7 @@ public class EntityMixin {
 
             return move.multiply(TRAVEL_BOOTS_SPEED_FACTOR, 1, TRAVEL_BOOTS_SPEED_FACTOR);
         }
-        if(oldStepHeight != null){
+        if (oldStepHeight != null) {
             stepHeight = oldStepHeight;
             oldStepHeight = null;
         }
@@ -64,12 +72,15 @@ public class EntityMixin {
 
     @Inject(method = "Lnet/minecraft/entity/Entity;getJumpVelocityMultiplier()F", at = @At("RETURN"), cancellable = true)
     private void tc_addJumpFactor(CallbackInfoReturnable<Float> cir) {
-        if (EntityUtil.shouldIncreaseJumpFactor(this)) {
+        if (EntityUtil.shouldIncreaseJumpFactor(this) && (!isFallFlying())) {
             cir.setReturnValue(cir.getReturnValue() * TRAVEL_BOOTS_JUMP_FACTOR);
-        }else{
+        } else {
             cir.setReturnValue(cir.getReturnValue());
         }
     }
 
 
+    public boolean isFallFlying() {
+        return this.getFlag(7);
+    }
 }

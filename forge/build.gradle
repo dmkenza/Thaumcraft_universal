@@ -42,7 +42,6 @@ loom {
 //    }
 
 
-
     forge {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
@@ -99,7 +98,6 @@ dependencies {
 //    }
 
 
-
 //    shadowCommon(fileTree(dir: 'libs_dev', include: ['*.jar']))
 
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
@@ -141,8 +139,7 @@ dependencies {
 //    shadowCommon1(project(path: ":common" , configuration: "transformProductionForge")){
 //        transitive false
 //    }
-    implementation(":thaumcraft-0.2.0-dev")
-    shadow(":thaumcraft-0.2.0-dev")
+
 
 //    shadowCommon(project(path: ":kenzaCore" , configuration: "transformProductionForge")){
 //        transitive false
@@ -160,28 +157,30 @@ dependencies {
         transitive false
     }
 
-    shadowCommon(project(path: ":common" , configuration: "transformProductionForge")){
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
         transitive false
     }
 
-//    common(fileTree(dir: 'libs_dev', include: ['*.jar']))
 //    implementation  fileTree(dir: 'libs_dev', include: ['*.jar'])
 //    include  fileTree(dir: 'libs_dev', include: ['*.jar'])
-    implementation(":LibGui-6.5.0-dev-shadow+1.19.2")// { transitive false }
-//    common (":LibGui-6.5.0-dev-shadow+1.19.2")
-//    include (":LibGui-6.5.0-dev-shadow+1.19.2")
-    include(":LibGui-6.5.0-dev-shadow+1.19.2") //{ transitive false }
 
-//    if (gradle.startParameter.taskNames == ["build"]) {
-//        common(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
-//        common(project(path: ":common", configuration: "namedElements")) { transitive false }
-//    }else{
-//        implementation(project(path: ":kenzaCore", configuration: "namedElements")) { transitive false }
-//        implementation(project(path: ":common", configuration: "namedElements")) { transitive false }
-//    }
+
+    if (gradle.startParameter.taskNames == ["build"]) {
+        implementation(":LibGui-6.5.0-dev-shadow+1.19.2")// { transitive false }
+        include(":LibGui-6.5.0-dev-shadow+1.19.2") //{ transitive false }
+        implementation(":thaumcraft-0.2.0-dev")
+        shadow(":thaumcraft-0.2.0-dev")
+    } else {
+        common(fileTree(dir: 'libs_dev', include: ['*.jar']))
+        common1(project(path: ":kenzaCore", configuration: "namedElements")) {
+            transitive false
+        }
+    }
 
 //    include(project(path: ":kenzaCore"))
 //    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
+
+    implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
 
     modRuntimeOnly "software.bernie.geckolib:geckolib-forge-1.19:${rootProject.geckolib_version_forge}"
@@ -214,16 +213,13 @@ shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
 
-    relocate ("io.kenza.support", "qwe.io.kenza.support")
+    relocate("io.kenza.support", "qwe.io.kenza.support")
 //    dependsOn(relocateShadowJar)
 
     configurations = [project.configurations.shadowCommon, project.configurations.shadow]
     mergeServiceFiles()
     classifier "dev-shadow"
 }
-
-
-
 
 
 remapJar {
